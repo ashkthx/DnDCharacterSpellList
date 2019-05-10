@@ -1,12 +1,17 @@
 {
-  "name": "1-Passport-Example",
+  "name": "DnDCharacterSpellList",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "watch": "nodemon server.js"
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:prod": "node server.js",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
+    "client": "cd client && npm run start",
+    "seed": "node scripts/seedDB.js",
+    "install": "cd client && npm install",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run build"
   },
   "keywords": [],
   "author": "",
@@ -15,9 +20,14 @@
     "bcrypt-nodejs": "0.0.3",
     "express": "^4.16.3",
     "express-session": "^1.14.2",
+    "if-env": "^1.0.4",
     "mysql2": "^1.6.4",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "sequelize": "^4.41.2"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.19.0"
   }
 }
