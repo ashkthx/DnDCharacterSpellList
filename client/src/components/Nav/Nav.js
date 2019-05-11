@@ -5,11 +5,11 @@ function Nav(props) {
     return (
         <nav className="navbar navbar-default">
             <div className="container-fluid">
-            <div className="navbar-header">
-                <a className="navbar-brand" href="/logout">
-                Logout
-                </a>
-            </div>
+                <div className="navbar-header">
+                    <a className="navbar-brand" href="/api/logout">
+                    Logout
+                    </a>
+                </div>
             </div>
         </nav>
     );

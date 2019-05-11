@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import API from "../../utils/API.js";
 import "./Home.css";
@@ -6,7 +7,8 @@ import "./Home.css";
 class Home extends Component {
     state = {
         email: "",
-        password: ""
+        password: "",
+        isLoggedIn: false
     };
 
     handleInputChange = event => {
@@ -19,13 +21,19 @@ class Home extends Component {
     handleFormSubmit = event => {
         event.preventDefault();
         API.userSignup(this.state).then(response => {
-            console.log(response);
+            console.log(response.data);
+            this.setState({ isLoggedIn: true });
         }).catch(err => {
             console.log(err);
         })
     };
 
     render() {
+
+        if(this.state.isLoggedIn) {
+            return <Redirect to="/members" />
+        }
+
         return (
             <Row>
                 <div className="col-md-6 col-md-offset-3">
