@@ -3,7 +3,7 @@ var LocalStrategy = require("passport-local").Strategy;
 
 var db = require("../models");
 
-// Telling passport we want to use a Local Strategy. In other words, we want login with a username/username and password
+// Set strategy
 passport.use(new LocalStrategy(
   function(username, password, done) {
     // When a user tries to sign in this code runs
@@ -30,9 +30,7 @@ passport.use(new LocalStrategy(
   }
 ));
 
-// In order to help keep authentication state across HTTP requests,
-// Sequelize needs to serialize and deserialize the user
-// Just consider this part boilerplate needed to make it all work
+// In order to help keep authentication state across HTTP requests
 passport.serializeUser(function(user, cb) {
   cb(null, user);
 });
