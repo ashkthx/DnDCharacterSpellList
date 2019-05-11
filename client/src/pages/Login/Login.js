@@ -3,7 +3,7 @@ import "./Login.css";
 
 class Login extends Component {
     render() {
-        return(
+        return (
             <div>Login</div>
         );
     };
