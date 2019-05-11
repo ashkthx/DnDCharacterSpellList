@@ -1,14 +1,19 @@
+// Npm packages
 import React from "react";
+import Container from "react-bootstrap/Container";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+// Components
 import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import Members from "./pages/Members";
 import Login from "./pages/Login";
+// Static
+import "./App.css"
 
 function App() {
   return (
     <Router>
-      <div>
+      <Container>
         <Nav />
         <Switch>
           <Route exact path="/" component={Home} />
@@ -16,7 +21,7 @@ function App() {
           <Route exact path="/members" component={Members} />
           {/* <Route component={NoMatch} /> */}
         </Switch>
-      </div>
+      </Container>
     </Router>
   );
 }
