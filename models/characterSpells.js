@@ -2,11 +2,11 @@
 module.exports = function(sequelize, DataTypes) {
   var CharacterSpells = sequelize.define("CharacterSpells", {
     CharacterId: {
-      type: DataTypes.INTEGERS,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     SpellId: {
-      type: DataTypes.INTEGERS,
+      type: DataTypes.INTEGER,
       allowNull: false
     }
   });
