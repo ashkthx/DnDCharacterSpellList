@@ -14,6 +14,7 @@ class Header extends Component {
     type: "", // "login" displays the login modal, "signup" displays the sign up modal
 
     // Form inputs
+    name: "",
     email: "",
     password: "",
     confirm: ""
@@ -78,6 +79,18 @@ class Header extends Component {
           </Modal.Header>
             <Modal.Body>
               <Form onSubmit={this.handleFormSubmit}>
+              {this.state.type === "Sign Up" && (
+                  <Form.Group controlId="formGroupName">
+                    <Form.Label>Your Name</Form.Label>
+                    <Form.Control
+                      name="name"
+                      value={this.state.name}
+                      onChange={this.handleInputChange}
+                      type="name"
+                      placeholder="Enter Your Name"
+                    />
+                  </Form.Group>
+                )}
                 <Form.Group controlId="formGroupEmail">
                   <Form.Label>Email Address</Form.Label>
                   <Form.Control
