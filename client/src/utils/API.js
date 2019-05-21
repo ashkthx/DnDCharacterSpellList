@@ -1,5 +1,7 @@
+// Dependencies
 import axios from "axios";
 
+// Methods for user status
 export default {
     userSignup: (userData) => {
         console.log("API: userSignup");

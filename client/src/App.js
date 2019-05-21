@@ -2,11 +2,13 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
 // Components
 import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import Members from "./pages/Members";
 import Login from "./pages/Login";
+
 // Static
 import "./App.css"
 
@@ -26,4 +28,5 @@ function App() {
   );
 }
 
+// Export
 export default App;

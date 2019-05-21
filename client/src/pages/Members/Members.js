@@ -1,3 +1,4 @@
+// Dependencies
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import API from "../../utils/API";
@@ -39,4 +40,5 @@ class Members extends Component {
     };
 };
 
+// Export
 export default Members;

@@ -1,3 +1,4 @@
+// Dependencies
 import React, { Component } from "react";
 import API from "../../utils/API.js";
 import Navbar from "react-bootstrap/Navbar";
@@ -19,14 +20,16 @@ class Header extends Component {
   };
 
   handleInputChange = event => {
-      const { name, value } = event.target;
-      this.setState({ [name]: value }, () => console.log(this.state[name]));
+    const { name, value } = event.target;
+    this.setState({ [name]: value }, () => console.log(this.state[name]));
   };
 
+  // Closing the modal
   handleClose = () => {
     this.setState({ show: false });
   };
 
+  // Opening the modal
   handleOpen = type => {
     this.setState({
       show: true,
@@ -34,22 +37,25 @@ class Header extends Component {
     });
   };
 
+// Signup button
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.type === "Sign Up") {
-        if (this.state.password !== this.state.confirm) {
-            console.log("Passwords do not match")
-            this.setState({
-                password: "",
-                confirm: ""
-            })
-        } else
-        API.userSignup(this.state).then(response => {
+      if (this.state.password !== this.state.confirm) {
+        console.log("Passwords do not match");
+        this.setState({
+          password: "",
+          confirm: ""
+        });
+      } else
+        API.userSignup(this.state)
+          .then(response => {
             console.log(response.data);
             this.setState({ isLoggedIn: true });
-        }).catch(err => {
+          })
+          .catch(err => {
             console.log(err);
-        });
+          });
     }
   };
 
@@ -70,24 +76,43 @@ class Header extends Component {
           <Modal.Header closeButton>
             <Modal.Title>{this.state.type}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <Form onSubmit={this.handleFormSubmit}>
-              <Form.Group controlId="formGroupEmail">
-                <Form.Label>Email Address</Form.Label>
-                <Form.Control name = "email" value={this.state.email} onChange={this.handleInputChange} type="email" placeholder="Enter Email" />
-              </Form.Group>
-              <Form.Group controlId="formGroupPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control name="password" value={this.state.password} onChange={this.handleInputChange} type="password" placeholder="Password" />
-              </Form.Group>
-              {this.state.type === "Sign Up" && (
-                <Form.Group controlId="formGroupConfirm">
-                  <Form.Label>Confirm Password</Form.Label>
-                  <Form.Control name="confirm" value={this.state.confirm} onChange={this.handleInputChange} type="password" placeholder="Confirm Password" />
+            <Modal.Body>
+              <Form onSubmit={this.handleFormSubmit}>
+                <Form.Group controlId="formGroupEmail">
+                  <Form.Label>Email Address</Form.Label>
+                  <Form.Control
+                    name="email"
+                    value={this.state.email}
+                    onChange={this.handleInputChange}
+                    type="email"
+                    placeholder="Enter Email"
+                  />
                 </Form.Group>
-              )}
-            </Form>
-          </Modal.Body>
+                <Form.Group controlId="formGroupPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    name="password"
+                    value={this.state.password}
+                    onChange={this.handleInputChange}
+                    type="password"
+                    placeholder="Password"
+                  />
+                </Form.Group>
+                {this.state.type === "Sign Up" && (
+                  <Form.Group controlId="formGroupConfirm">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control
+                      name="confirm"
+                      value={this.state.confirm}
+                      onChange={this.handleInputChange}
+                      type="password"
+                      placeholder="Confirm Password"
+                    />
+                  </Form.Group>
+                  
+                )}
+              </Form>
+            </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleClose}>
               Close
@@ -102,4 +127,5 @@ class Header extends Component {
   }
 }
 
+// Export
 export default Header;
