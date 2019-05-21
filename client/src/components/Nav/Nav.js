@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import API from "../../utils/API.js";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Modal from "react-bootstrap/Modal";
@@ -42,7 +43,13 @@ class Header extends Component {
                 password: "",
                 confirm: ""
             })
-        }
+        } else
+        API.userSignup(this.state).then(response => {
+            console.log(response.data);
+            this.setState({ isLoggedIn: true });
+        }).catch(err => {
+            console.log(err);
+        });
     }
   };
 
@@ -86,7 +93,7 @@ class Header extends Component {
               Close
             </Button>
             <Button variant="primary" onClick={this.handleFormSubmit}>
-              Save Changes
+              {this.state.type}
             </Button>
           </Modal.Footer>
         </Modal>
