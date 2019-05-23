@@ -6,18 +6,27 @@ import Nav from "react-bootstrap/Nav";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { withRouter } from "react-router-dom";
 import "./Nav.css";
 
 class Header extends Component {
   state = {
     show: false,
     type: "", // "login" displays the login modal, "signup" displays the sign up modal
+    isLoggedIn: false,
 
     // Form inputs
     name: "",
     email: "",
     password: "",
-    confirm: ""
+    confirm: "",
+
+    // Validate
+    submitted: false
+  };
+
+  componentDidMount() {
+
   };
 
   handleInputChange = event => {
@@ -52,7 +61,33 @@ class Header extends Component {
         API.userSignup(this.state)
           .then(response => {
             console.log(response.data);
-            this.setState({ isLoggedIn: true });
+            this.setState({ 
+                show: false,
+                type: "", 
+                isLoggedIn: true,
+                name: "",
+                email: "",
+                password: "",
+                confirm: "",
+                submitted: false
+            }, () => this.props.history.push("/members"));
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    } else {
+        API.userLogin(this.state).then(response => {
+            console.log(response.data);
+            this.setState({ 
+                show: false,
+                type: "", 
+                isLoggedIn: true,
+                name: "",
+                email: "",
+                password: "",
+                confirm: "",
+                submitted: false
+            }, () => this.props.history.push("/members"));
           })
           .catch(err => {
             console.log(err);
@@ -60,17 +95,39 @@ class Header extends Component {
     }
   };
 
+  handleLogout = () => {
+    API.userLogout()
+        .then(response => {
+            this.setState({
+                show: false,
+                type: "", 
+                isLoggedIn: false,
+                name: "",
+                email: "",
+                password: "",
+                confirm: "",
+                submitted: false
+            }, () => this.props.history.push("/"))
+        })
+        .catch(err => {
+            console.log(err);
+          });
+  };
+
   render() {
     return (
       <div>
         <Navbar fixed="top" bg="dark" variant="dark">
           <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+          {this.state.isLoggedIn ? 
           <Nav className="mr-auto">
-            <Nav.Link onClick={() => this.handleOpen("Login")}>Login</Nav.Link>
-            <Nav.Link onClick={() => this.handleOpen("Sign Up")}>
-              Sign Up
-            </Nav.Link>
-          </Nav>
+            <Nav.Link onClick={this.handleLogout}>Logout</Nav.Link> </Nav>
+            :
+            <Nav className="mr-auto">                
+                <Nav.Link onClick={() => this.handleOpen("Login")}>Login</Nav.Link>
+                <Nav.Link onClick={() => this.handleOpen("Sign Up")}>Sign Up</Nav.Link>
+            </Nav>
+          }
         </Navbar>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
@@ -141,4 +198,4 @@ class Header extends Component {
 }
 
 // Export
-export default Header;
+export default withRouter(Header);
