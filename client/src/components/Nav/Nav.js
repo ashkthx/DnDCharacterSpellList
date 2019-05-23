@@ -22,12 +22,11 @@ class Header extends Component {
     confirm: "",
 
     // Validate
-    submitted: false
+    submitted: false,
+    errorMessage: null
   };
 
-  componentDidMount() {
-
-  };
+  componentDidMount() {}
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -36,7 +35,10 @@ class Header extends Component {
 
   // Closing the modal
   handleClose = () => {
-    this.setState({ show: false });
+    this.setState({
+      show: false,
+      errorMessage: null
+    });
   };
 
   // Opening the modal
@@ -47,13 +49,21 @@ class Header extends Component {
     });
   };
 
-// Signup button
+  // Signup button
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.type === "Sign Up") {
+      if (
+        !this.state.name ||
+        !this.state.email ||
+        !this.state.password ||
+        !this.state.confirm
+      ) {
+        return this.setState({ errorMessage: "Please fill in all fields" });
+      }
       if (this.state.password !== this.state.confirm) {
-        console.log("Passwords do not match");
         this.setState({
+          errorMessage: "Passwords do not match",
           password: "",
           confirm: ""
         });
@@ -61,57 +71,80 @@ class Header extends Component {
         API.userSignup(this.state)
           .then(response => {
             console.log(response.data);
-            this.setState({ 
+            this.setState(
+              {
                 show: false,
-                type: "", 
+                type: "",
                 isLoggedIn: true,
                 name: "",
                 email: "",
                 password: "",
                 confirm: "",
                 submitted: false
-            }, () => this.props.history.push("/members"));
+              },
+              () => this.props.history.push("/members")
+            );
           })
           .catch(err => {
+            this.setState({ 
+              // err.response.data comes from api-routes.js
+              errorMessage: err.response.data,
+              email: ""
+            });
             console.log(err);
           });
     } else {
-        API.userLogin(this.state).then(response => {
-            console.log(response.data);
-            this.setState({ 
-                show: false,
-                type: "", 
-                isLoggedIn: true,
-                name: "",
-                email: "",
-                password: "",
-                confirm: "",
-                submitted: false
-            }, () => this.props.history.push("/members"));
-          })
-          .catch(err => {
-            console.log(err);
+      // Check to make sure all fields are filled in
+      if (!this.state.email || !this.state.password) {
+        return this.setState({ errorMessage: "Please fill in all fields" });
+      }
+      API.userLogin(this.state)
+        .then(response => {
+          console.log(response.data);
+          this.setState(
+            {
+              show: false,
+              type: "",
+              isLoggedIn: true,
+              name: "",
+              email: "",
+              password: "",
+              confirm: "",
+              submitted: false
+            },
+            () => this.props.history.push("/members")
+          );
+        })
+        .catch(err => {
+          this.setState({ 
+            errorMessage: "Email or password is incorrect",
+            password: ""
           });
+          console.log(err);
+        });
     }
   };
 
   handleLogout = () => {
     API.userLogout()
-        .then(response => {
-            this.setState({
-                show: false,
-                type: "", 
-                isLoggedIn: false,
-                name: "",
-                email: "",
-                password: "",
-                confirm: "",
-                submitted: false
-            }, () => this.props.history.push("/"))
-        })
-        .catch(err => {
-            console.log(err);
-          });
+      .then(response => {
+        this.setState(
+          {
+            show: false,
+            type: "",
+            isLoggedIn: false,
+            name: "",
+            email: "",
+            password: "",
+            confirm: "",
+            submitted: false
+          },
+          () => this.props.history.push("/")
+        );
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   render() {
@@ -119,71 +152,78 @@ class Header extends Component {
       <div>
         <Navbar fixed="top" bg="dark" variant="dark">
           <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-          {this.state.isLoggedIn ? 
-          <Nav className="mr-auto">
-            <Nav.Link onClick={this.handleLogout}>Logout</Nav.Link> </Nav>
-            :
-            <Nav className="mr-auto">                
-                <Nav.Link onClick={() => this.handleOpen("Login")}>Login</Nav.Link>
-                <Nav.Link onClick={() => this.handleOpen("Sign Up")}>Sign Up</Nav.Link>
+          {this.state.isLoggedIn ? (
+            <Nav className="mr-auto">
+              <Nav.Link onClick={this.handleLogout}>Logout</Nav.Link>{" "}
             </Nav>
-          }
+          ) : (
+            <Nav className="mr-auto">
+              <Nav.Link onClick={() => this.handleOpen("Login")}>
+                Login
+              </Nav.Link>
+              <Nav.Link onClick={() => this.handleOpen("Sign Up")}>
+                Sign Up
+              </Nav.Link>
+            </Nav>
+          )}
         </Navbar>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>{this.state.type}</Modal.Title>
           </Modal.Header>
-            <Modal.Body>
-              <Form onSubmit={this.handleFormSubmit}>
+          <Modal.Body>
+            <Form onSubmit={this.handleFormSubmit}>
               {this.state.type === "Sign Up" && (
-                  <Form.Group controlId="formGroupName">
-                    <Form.Label>Your Name</Form.Label>
-                    <Form.Control
-                      name="name"
-                      value={this.state.name}
-                      onChange={this.handleInputChange}
-                      type="name"
-                      placeholder="Enter Your Name"
-                    />
-                  </Form.Group>
-                )}
-                <Form.Group controlId="formGroupEmail">
-                  <Form.Label>Email Address</Form.Label>
+                <Form.Group controlId="formGroupName">
+                  <Form.Label>Your Name</Form.Label>
                   <Form.Control
-                    name="email"
-                    value={this.state.email}
+                    name="name"
+                    value={this.state.name}
                     onChange={this.handleInputChange}
-                    type="email"
-                    placeholder="Enter Email"
+                    type="name"
+                    placeholder="Enter Your Name"
                   />
                 </Form.Group>
-                <Form.Group controlId="formGroupPassword">
-                  <Form.Label>Password</Form.Label>
+              )}
+              <Form.Group controlId="formGroupEmail">
+                <Form.Label>Email Address</Form.Label>
+                <Form.Control
+                  name="email"
+                  value={this.state.email}
+                  onChange={this.handleInputChange}
+                  type="email"
+                  placeholder="Enter Email"
+                />
+              </Form.Group>
+              <Form.Group controlId="formGroupPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.handleInputChange}
+                  type="password"
+                  placeholder="Password"
+                />
+              </Form.Group>
+              {this.state.type === "Sign Up" && (
+                <Form.Group controlId="formGroupConfirm">
+                  <Form.Label>Confirm Password</Form.Label>
                   <Form.Control
-                    name="password"
-                    value={this.state.password}
+                    name="confirm"
+                    value={this.state.confirm}
                     onChange={this.handleInputChange}
                     type="password"
-                    placeholder="Password"
+                    placeholder="Confirm Password"
                   />
                 </Form.Group>
-                {this.state.type === "Sign Up" && (
-                  <Form.Group controlId="formGroupConfirm">
-                    <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control
-                      name="confirm"
-                      value={this.state.confirm}
-                      onChange={this.handleInputChange}
-                      type="password"
-                      placeholder="Confirm Password"
-                    />
-                  </Form.Group>
-                  
-                )}
-              </Form>
-            </Modal.Body>
+              )}
+            </Form>
+          </Modal.Body>
           <Modal.Footer>
+            {this.state.errorMessage && (
+              <div className="feedback">{this.state.errorMessage}</div>
+            )}
             <Button variant="secondary" onClick={this.handleClose}>
               Close
             </Button>
