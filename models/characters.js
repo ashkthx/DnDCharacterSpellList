@@ -5,15 +5,15 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     },
-    class: {
+    characterClass: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    race: {
+    characterRace: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    level: {
+    characterLevel: {
       type: DataTypes.INTEGER,
       allowNull: false
     },

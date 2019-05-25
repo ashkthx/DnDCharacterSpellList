@@ -4,15 +4,15 @@ var passport = require("../config/passport");
 
 module.exports = function(app) {
   // Login
-  app.post("/api/login", passport.authenticate("local"), function(req, res) {
+  app.post("/api/user/login", passport.authenticate("local"), function(req, res) {
     res.json("/members");
   });
 
   // Signup
-  app.post("/api/signup", function(req, res) {
+  app.post("/api/user/signup", function(req, res) {
     console.log(req.body);
     db.User.create(req.body).then(function() {
-      res.redirect(307, "/api/login");
+      res.redirect(307, "/api/user/login");
     }).catch(function(err) {
       console.log(err);
       const errMessage = err.errors[0].message;
@@ -27,13 +27,13 @@ module.exports = function(app) {
   });
 
   // Logout
-  app.get("/api/logout", function(req, res) {
+  app.get("/api/user/logout", function(req, res) {
     req.logout();
     res.redirect("/");
   });
 
   // Getting user data
-  app.get("/api/user_data", function(req, res) {
+  app.get("/api/user/user_data", function(req, res) {
     if (!req.user) {
       // The user is not logged in, send back an empty object
       res.json({});
@@ -46,4 +46,6 @@ module.exports = function(app) {
       });
     }
   });
+
+  //  Make POST "/api/character/create"
 };

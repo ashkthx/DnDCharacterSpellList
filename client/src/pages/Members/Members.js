@@ -21,9 +21,9 @@ class Members extends Component {
 
     // Form
     characterName: "",
-    race: "",
-    class: "",
-    level: ""
+    characterRace: "",
+    characterClass: "",
+    characterLevel: ""
   };
 
   componentWillMount() {
@@ -54,11 +54,16 @@ class Members extends Component {
   };
 
   handleFormSubmit = () => {
-    console.log("Submitted form");
+    if (this.state.type === "Character") {
+      this.createCharacter();
+    }
   };
 
   createCharacter = () => {
-    console.log("Character created");
+    const { characterName, characterClass, characterRace, characterLevel } = this.state;
+    API.createCharacter({ characterName, characterClass, characterRace, characterLevel }).then(response => {
+      console.log("Created character");
+    });
   };
 
   render() {
@@ -91,7 +96,7 @@ class Members extends Component {
               <Form.Group controlId="formCharacterRace">
                 <Form.Label>Race</Form.Label>
                 <Form.Control
-                  name="race"
+                  name="characterRace"
                   value={this.state.password}
                   onChange={this.handleInputChange}
                 />
@@ -99,7 +104,7 @@ class Members extends Component {
               <Form.Group controlId="formCharacterClass">
                 <Form.Label>Class</Form.Label>
                 <Form.Control
-                  name="class"
+                  name="characterClass"
                   value={this.state.password}
                   onChange={this.handleInputChange}
                 />
@@ -107,7 +112,7 @@ class Members extends Component {
               <Form.Group controlId="formCharacterLevel">
                 <Form.Label>Level</Form.Label>
                 <Form.Control
-                  name="level"
+                  name="characterLevel"
                   value={this.state.password}
                   onChange={this.handleInputChange}
                 />
