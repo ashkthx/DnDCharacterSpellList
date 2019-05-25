@@ -16,9 +16,9 @@ class Header extends Component {
     isLoggedIn: false,
 
     // Form inputs
-    name: "",
-    email: "",
-    password: "",
+    name: "Ashley",
+    email: "ash@ash.com",
+    password: "asdf",
     confirm: "",
 
     // Validate
@@ -193,7 +193,7 @@ class Header extends Component {
                   value={this.state.email}
                   onChange={this.handleInputChange}
                   type="email"
-                  placeholder="Enter Email"
+                  placeholder="Email"
                 />
               </Form.Group>
               <Form.Group controlId="formGroupPassword">
@@ -227,7 +227,7 @@ class Header extends Component {
             <Button variant="secondary" onClick={this.handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={this.handleFormSubmit}>
+            <Button variant="dark" onClick={this.handleFormSubmit}>
               {this.state.type}
             </Button>
           </Modal.Footer>

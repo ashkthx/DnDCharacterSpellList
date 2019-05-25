@@ -36,7 +36,7 @@ class Login extends Component {
         }
 
         return (
-            <div className="row">
+            <Row>
               <div className="col-md-6 col-md-offset-3">
                 <h2>Login Form</h2>
                 <form className="login">
@@ -53,7 +53,7 @@ class Login extends Component {
                 <br />
                 <p>Or sign up <a href="/">here</a></p>
               </div>
-            </div>
+            </Row>
         );
     };
 };

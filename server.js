@@ -28,7 +28,13 @@ require("./routes/api-routes.js")(app);
 
 // Database sync
 db.sequelize.sync({ force: true }).then(function() {
+  db.User.create({
+    name: "Ashley",
+    email: "ash@ash.com",
+    password: "asdf"
+  }).then(() => {
   app.listen(PORT, function() {
     console.log("==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.", PORT, PORT);
   });
+});
 });
