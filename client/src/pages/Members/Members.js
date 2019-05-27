@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import Card from "react-bootstrap/Card";
 import API from "../../utils/API";
 import Row from "react-bootstrap/Row";
 import "./Members.css";
@@ -27,8 +28,8 @@ class Members extends Component {
   };
 
   componentWillMount() {
-   this.getUserData();
-  };
+    this.getUserData();
+  }
 
   getUserData = () => {
     API.userInfo().then(response => {
@@ -74,13 +75,16 @@ class Members extends Component {
       characterLevel
     }).then(response => {
       console.log("Created character");
-      this.setState({
-        show: false,
-        characterName: "",
-        characterRace: "",
-        characterClass: "",
-        characterLevel: ""
-      }, this.getUserData);
+      this.setState(
+        {
+          show: false,
+          characterName: "",
+          characterRace: "",
+          characterClass: "",
+          characterLevel: ""
+        },
+        this.getUserData
+      );
     });
   };
 
@@ -94,12 +98,22 @@ class Members extends Component {
         <Row>
           <div className="col-md-6 col-md-offset-3">
             <h2>Welcome {this.state.name}!</h2>
-            <Button onClick={this.handleOpen} variant="dark">
+            <Button onClick={this.handleOpen} variant="dark" bsPrefix="btn new-char-btn">
               Create a New Character
             </Button>
-            {/* Put characters here  */}
+            {this.state.characterArr.map((element, i) => {
+              return <Card key={i} border="dark" bsPrefix="card character-card">
+                <Card.Body>
+                  <Card.Title>{element.characterName}</Card.Title>
+                  <Card.Text>
+                    Level {element.characterLevel} {element.characterRace} {element.characterClass}
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            })}
           </div>
         </Row>
+
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>New {this.state.type}</Modal.Title>

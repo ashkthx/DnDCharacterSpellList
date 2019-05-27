@@ -33,8 +33,16 @@ db.sequelize.sync({ force: true }).then(function() {
     email: "ash@ash.com",
     password: "asdf"
   }).then(() => {
-  app.listen(PORT, function() {
-    console.log("==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.", PORT, PORT);
+    db.Characters.create({
+      userId: 1,
+      characterName: "Victra au Bast",
+      characterLevel: 6,
+      characterRace: "Half Elf",
+      characterClass: "Warlock"
+    }).then(() => {
+      app.listen(PORT, function() {
+        console.log("==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.", PORT, PORT);
+      });
+    });
   });
-});
 });
