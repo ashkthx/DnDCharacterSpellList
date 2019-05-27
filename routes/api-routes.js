@@ -2,19 +2,20 @@
 var db = require("../models");
 var passport = require("../config/passport");
 
-module.exports = function(app) {
+module.exports = (app) => {
   // Login
-  app.post("/api/user/login", passport.authenticate("local"), function(req, res) {
+  app.post("/api/user/login", passport.authenticate("local"), (req, res) => {
     res.json("/members");
   });
 
   // Signup
-  app.post("/api/user/signup", function(req, res) {
+  app.post("/api/user/signup", (req, res) => {
     console.log(req.body);
-    db.User.create(req.body).then(function() {
+    db.User.create(req.body).then(() => {
       res.redirect(307, "/api/user/login");
     }).catch(function(err) {
       console.log(err);
+      // Error handling
       const errMessage = err.errors[0].message;
       let newMessage;
       if (errMessage[0] === "V") {
@@ -27,25 +28,39 @@ module.exports = function(app) {
   });
 
   // Logout
-  app.get("/api/user/logout", function(req, res) {
+  app.get("/api/user/logout", (req, res) => {
     req.logout();
     res.redirect("/");
   });
 
-  // Getting user data
-  app.get("/api/user/user_data", function(req, res) {
+  // Getting user/character data
+  app.get("/api/user/user_data", (req, res) => {
     if (!req.user) {
       // The user is not logged in, send back an empty object
       res.json({});
     }
-    else {
-      // Otherwise send back the user's email and id
-      res.json({
-        name: req.user.name,
-        id: req.user.id
+    else {      
+      // Otherwise send back the user's email and character info
+      db.Characters.findAll({ userId: req.user.id }).then(response => {
+        res.json({
+          name: req.user.name,
+          characterArr: response
+        });
       });
     }
   });
 
-  //  Make POST "/api/character/create"
+  // Create character
+  app.post("/api/character/create", (req, res) =>{
+    db.Characters.create({
+      ...req.body,
+      userId: req.user.id
+    }).then((response) => {
+      res.json(response);
+    }).catch((err) => {
+      res.json(err);
+    });
+  });
+
+
 };

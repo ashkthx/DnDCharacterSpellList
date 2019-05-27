@@ -11,7 +11,7 @@ import "./Members.css";
 class Members extends Component {
   state = {
     name: "",
-    id: "",
+    characterArr: [],
     isLoggedIn: true,
 
     // Modal
@@ -27,6 +27,10 @@ class Members extends Component {
   };
 
   componentWillMount() {
+   this.getUserData();
+  };
+
+  getUserData = () => {
     API.userInfo().then(response => {
       if (response.data.name) {
         this.setState(response.data);
@@ -53,16 +57,30 @@ class Members extends Component {
     });
   };
 
-  handleFormSubmit = () => {
+  handleFormSubmit = event => {
+    event.preventDefault();
     if (this.state.type === "Character") {
-      this.createCharacter();
+      this.characterCreate();
     }
   };
 
-  createCharacter = () => {
-    const { characterName, characterClass, characterRace, characterLevel } = this.state;
-    API.createCharacter({ characterName, characterClass, characterRace, characterLevel }).then(response => {
+  characterCreate = () => {
+    const { characterName, characterClass, characterRace } = this.state;
+    const characterLevel = parseInt(this.state.characterLevel);
+    API.characterCreate({
+      characterName,
+      characterClass,
+      characterRace,
+      characterLevel
+    }).then(response => {
       console.log("Created character");
+      this.setState({
+        show: false,
+        characterName: "",
+        characterRace: "",
+        characterClass: "",
+        characterLevel: ""
+      }, this.getUserData);
     });
   };
 
@@ -76,7 +94,10 @@ class Members extends Component {
         <Row>
           <div className="col-md-6 col-md-offset-3">
             <h2>Welcome {this.state.name}!</h2>
-            <Button onClick={this.handleOpen} variant="dark">Create a New Character</Button>
+            <Button onClick={this.handleOpen} variant="dark">
+              Create a New Character
+            </Button>
+            {/* Put characters here  */}
           </div>
         </Row>
         <Modal show={this.state.show} onHide={this.handleClose}>
