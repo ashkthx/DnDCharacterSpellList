@@ -25,5 +25,9 @@ export default {
     characterCreate: (characterData) => {        
         console.log("API: characterCreate");
         return axios.post("/api/character/create", characterData);
+    },
+    characterData: (characterId) => {
+        console.log("API: characterData");
+        return axios.get("/api/character/data/" + characterId);
     }
 };

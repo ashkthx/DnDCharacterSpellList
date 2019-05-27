@@ -62,5 +62,30 @@ module.exports = (app) => {
     });
   });
 
+  // Get character data fro db
+  app.get("/api/character/data/:characterId", (req, res) =>{
+    if (!req.user) {
+      return res.json({ status: false });
+    } 
+    else {
+      db.Characters.findOne({
+        id: req.params.characterId
+      }).then(response => {
+        if(response.userId !== req.user.id) {
+          return res.json({ status: false });
+        }
+        else {
+          const { characterName, characterLevel, characterRace, characterClass } = response;
+          res.json({
+            characterName, 
+            characterLevel, 
+            characterRace, 
+            characterClass,
+            status: true
+          });
+        }
+      });
+    }
+  });
 
 };

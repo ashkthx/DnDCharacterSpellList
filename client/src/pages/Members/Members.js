@@ -88,6 +88,10 @@ class Members extends Component {
     });
   };
 
+  handleCardClick = data => {
+
+  };
+
   render() {
     if (!this.state.isLoggedIn) {
       return <Redirect to="/" />;
@@ -98,11 +102,11 @@ class Members extends Component {
         <Row>
           <div className="col-md-6 col-md-offset-3">
             <h2>Welcome {this.state.name}!</h2>
-            <Button onClick={this.handleOpen} variant="dark" bsPrefix="btn new-char-btn">
+            <Button onClick={this.handleOpen} variant="dark">
               Create a New Character
             </Button>
             {this.state.characterArr.map((element, i) => {
-              return <Card key={i} border="dark" bsPrefix="card character-card">
+              return <Card key={i} border="dark" bsPrefix="card character-card" onClick={() => console.log("hi")}>
                 <Card.Body>
                   <Card.Title>{element.characterName}</Card.Title>
                   <Card.Text>
