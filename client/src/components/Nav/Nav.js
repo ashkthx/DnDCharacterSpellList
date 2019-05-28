@@ -26,7 +26,13 @@ class Header extends Component {
     errorMessage: null
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    API.userIsLoggedIn().then((response) => {
+      this.setState({
+        isLoggedIn: response.data
+      });
+    })
+  };
 
   handleInputChange = event => {
     const { name, value } = event.target;

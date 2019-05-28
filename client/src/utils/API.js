@@ -20,6 +20,10 @@ export default {
         console.log("API: userInfo");
         return axios.get("/api/user/user_data");
     },
+    userIsLoggedIn: () => {
+        console.log("API: userIsLoggedIn");
+        return axios.get("/api/user/is_logged_in");
+    },
 
     // Character methods
     characterCreate: (characterData) => {        
@@ -29,5 +33,11 @@ export default {
     characterData: (characterId) => {
         console.log("API: characterData");
         return axios.get("/api/character/data/" + characterId);
+    },
+
+    // Spell methods
+    spellAdd: (spellData) => {
+        console.log("API: spellData");
+        return axios.post("/api/spell/add", spellData);
     }
 };

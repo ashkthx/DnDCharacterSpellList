@@ -50,6 +50,16 @@ module.exports = (app) => {
     }
   });
 
+  // Is user logged in
+  app.get("/api/user/is_logged_in", (req, res) => {
+    if (req.user) {
+      res.send(true);
+    }
+    else {
+      res.send(false);
+    };
+  });
+
   // Create character
   app.post("/api/character/create", (req, res) =>{
     db.Characters.create({
@@ -62,7 +72,7 @@ module.exports = (app) => {
     });
   });
 
-  // Get character data fro db
+  // Get character data from db
   app.get("/api/character/data/:characterId", (req, res) =>{
     if (!req.user) {
       return res.json({ status: false });
@@ -86,6 +96,20 @@ module.exports = (app) => {
         }
       });
     }
+  });
+
+  // Add spell
+  app.post("/api/spell/add", (req, res) => {
+    // Make string lowercase and remove special characters
+    const editedSpellName = req.body.spellName.toLowerCase().replace(/[^\w\s]/gi, "");
+    db.Spells.findOne({ editedName: editedSpellName }).then(spellsResponse => {
+      console.log(editedSpellName);
+      // If we don't find anything we need to scrape the website
+      // Update the CharacterSpells table with the new association
+      db.CharacterSpells.findAll({ characterId: req.body.characterId }).then(spellsArr => {
+        res.json(spellsArr);
+      });
+    });
   });
 
 };

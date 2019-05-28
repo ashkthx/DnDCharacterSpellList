@@ -1,6 +1,10 @@
 // Creating Spells model
 module.exports = function(sequelize, DataTypes) {
   var Spells = sequelize.define("Spells", {
+    editedName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false

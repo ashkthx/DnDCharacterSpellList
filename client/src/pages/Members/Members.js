@@ -1,6 +1,7 @@
 // Dependencies
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
@@ -88,8 +89,8 @@ class Members extends Component {
     });
   };
 
-  handleCardClick = data => {
-
+  handleCardClick = characterId => {
+    this.props.history.push("/character/" + characterId);
   };
 
   render() {
@@ -106,7 +107,7 @@ class Members extends Component {
               Create a New Character
             </Button>
             {this.state.characterArr.map((element, i) => {
-              return <Card key={i} border="dark" bsPrefix="card character-card" onClick={() => console.log("hi")}>
+              return <Card key={i} border="dark" bsPrefix="card character-card" onClick={() => this.handleCardClick(element.id)}>
                 <Card.Body>
                   <Card.Title>{element.characterName}</Card.Title>
                   <Card.Text>
@@ -176,4 +177,4 @@ class Members extends Component {
 }
 
 // Export
-export default Members;
+export default withRouter(Members);

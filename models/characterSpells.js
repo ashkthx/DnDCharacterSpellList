@@ -1,11 +1,11 @@
 // Creating CharacterSpells model
 module.exports = function(sequelize, DataTypes) {
   var CharacterSpells = sequelize.define("CharacterSpells", {
-    CharacterId: {
+    characterId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    SpellId: {
+    spellId: {
       type: DataTypes.INTEGER,
       allowNull: false
     }
