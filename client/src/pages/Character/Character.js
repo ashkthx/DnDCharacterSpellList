@@ -6,6 +6,7 @@ import Row from "react-bootstrap/Row";
 import { Redirect } from "react-router-dom";
 import API from "../../utils/API";
 import SpellCard from "../../components/SpellCard";
+import LevelWrapper from "../../components/LevelWrapper/LevelWrapper";
 import "./Character.css";
 
 class Character extends Component {
@@ -59,6 +60,34 @@ class Character extends Component {
     });
   };
 
+  renderSpells = () => {
+    const spellsObj = {};
+
+    this.state.spellsArr.forEach((element, i) => {
+      if (spellsObj[element.level]) {
+        spellsObj[element.level].push(<SpellCard {...element} handleDelete={this.handleDelete} key={i} />);
+      }
+      else {
+        spellsObj[element.level] = [<SpellCard {...element} handleDelete={this.handleDelete} key={i} />];
+      }
+    });
+
+    const orderArr = ["Cantrip", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    const wrapperArr = [];
+
+    orderArr.forEach((element, i) => {
+      if (spellsObj[element]) {
+        wrapperArr.push(
+        <LevelWrapper level={element} key={i}>
+          {spellsObj[element]}
+        </LevelWrapper>
+        )
+      }
+    });
+
+    return wrapperArr;
+  };
+
   render() {
     if (!this.state.isLoggedIn) {
       return <Redirect to="/" />;
@@ -82,10 +111,7 @@ class Character extends Component {
             </Button>
           </InputGroup.Append>
         </InputGroup>
-
-        {this.state.spellsArr.map((spell, i) => {
-          return <SpellCard {...spell} handleDelete={this.handleDelete} key={i} />
-        })}
+        {this.renderSpells()}
       </Row>
     );
   }

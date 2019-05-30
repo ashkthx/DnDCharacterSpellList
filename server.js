@@ -26,7 +26,7 @@ app.use(passport.session());
 require("./routes/api-routes.js")(app);
 
 // Database sync
-db.sequelize.sync().then(function() {
+db.sequelize.sync({ force: false }).then(function() {
   // db.User.create({
   //   name: "Ashley",
   //   email: "ash@ash.com",

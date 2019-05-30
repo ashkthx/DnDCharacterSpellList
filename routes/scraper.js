@@ -28,7 +28,7 @@ const scraper = (editedName, cb) => {
       if (i === 1) {
         $(element).find("strong").each((j, strong) => {
           if (j === 0) {
-            level = $(strong).text();
+            level = $(strong).text().trim();
           }
           if (j === 1) {
             casting_time = $(strong).text();

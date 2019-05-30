@@ -5,11 +5,11 @@ import "./SpellCard.css";
 
 function SpellCard(props) {
   return (
-    <Card bsPrefix="card spell-card-body" bg="dark" text="white" style={{ width: "18rem" }}>
+    <Card bsPrefix="card spell-card-body" bg="dark" text="white">
       <Card.Body>
         <Card.Title>
           <span className="spell-title">{props.spellTitle}</span>
-          <Badge onClick={() => this.handleDelete(props.id)} variant="light">X</Badge>
+          <Badge onClick={() => props.handleDelete(props.id)} variant="light">X</Badge>
         </Card.Title>
         <Card.Text>
           Level: {props.level} 
