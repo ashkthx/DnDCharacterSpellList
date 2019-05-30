@@ -39,5 +39,9 @@ export default {
     spellAdd: (spellData) => {
         console.log("API: spellData");
         return axios.post("/api/spell/add", spellData);
+    },
+    spellDelete: (spellData) => {
+        console.log("API: spellDelete");
+        return axios.post("/api/spell/delete", spellData);
     }
 };

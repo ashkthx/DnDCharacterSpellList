@@ -3,6 +3,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import Badge from "react-bootstrap/Badge";
 import Row from "react-bootstrap/Row";
 import { Redirect } from "react-router-dom";
 import API from "../../utils/API";
@@ -49,6 +50,16 @@ class Character extends Component {
     });
   };
 
+  handleDelete = (spellId) => {
+    const deleteObj = {
+      characterId: this.props.match.params.characterId,
+      spellId
+    }
+    API.spellDelete(deleteObj).then(response => {
+      this.setState({ spellsArr: response.data });
+    });
+  };
+
   render() {
     if (!this.state.isLoggedIn) {
       return <Redirect to="/" />;
@@ -75,9 +86,12 @@ class Character extends Component {
 
         {this.state.spellsArr.map((spell, i) => {
           return(
-            <Card key={i} bg="dark" text="white" style={{ width: "18rem" }}>
+            <Card bsPrefix="card spell-card-body" key={i} bg="dark" text="white" style={{ width: "18rem" }}>
               <Card.Body>
-                <Card.Title>{spell.spellTitle}</Card.Title>
+                <Card.Title>
+                <span className="spell-title">{spell.spellTitle}</span>
+                <Badge onClick={() => this.handleDelete(spell.id)} variant="light">X</Badge>
+                </Card.Title>
                   <Card.Text>
                     Level: {spell.level} 
                     Range: {spell.range}

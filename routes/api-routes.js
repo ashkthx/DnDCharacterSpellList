@@ -166,4 +166,25 @@ module.exports = (app) => {
     });
   });
 
+  // Delete
+  app.post("/api/spell/delete", (req, res) => {
+    db.CharacterSpells.destroy({
+      where: req.body
+    }).then(() => {
+      db.CharacterSpells.findAll({ 
+        where: {
+          characterId: req.body.characterId 
+        }}).then(spellsArr => {
+        const spellIdArr = spellsArr.map((element) => element.spellId);
+        db.Spells.findAll({ 
+          where: {
+            id: { $in: spellIdArr }
+          }
+        }).then((spellData) => {
+          res.json(spellData);
+        });                       
+      });
+    });
+  });
+  
 };

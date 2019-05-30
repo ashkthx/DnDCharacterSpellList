@@ -1,0 +1,16 @@
+/* spell-card-body {
+  
+} */
+
+.card-title {
+  display: flex;
+}
+
+.spell-title {
+  display: flex;
+  flex-grow: 1;
+}
+
+.badge {
+  cursor: pointer;
+}
