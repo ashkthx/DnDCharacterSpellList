@@ -16,7 +16,7 @@ import "./App.css"
 function App() {
   return (
     <Router>
-      <Container>
+      <Container bsPrefix="container app-container">
         <Nav />
         <Switch>
           <Route exact path="/" component={Home} />

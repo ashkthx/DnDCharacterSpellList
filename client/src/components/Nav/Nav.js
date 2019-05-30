@@ -6,6 +6,7 @@ import Nav from "react-bootstrap/Nav";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Container from "react-bootstrap/Container";
 import { withRouter } from "react-router-dom";
 import "./Nav.css";
 
@@ -157,21 +158,23 @@ class Header extends Component {
     return (
       <div>
         <Navbar fixed="top" bg="dark" variant="dark">
-          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-          {this.state.isLoggedIn ? (
-            <Nav className="mr-auto">
-              <Nav.Link onClick={this.handleLogout}>Logout</Nav.Link>{" "}
-            </Nav>
-          ) : (
-            <Nav className="mr-auto">
-              <Nav.Link onClick={() => this.handleOpen("Login")}>
-                Login
-              </Nav.Link>
-              <Nav.Link onClick={() => this.handleOpen("Sign Up")}>
-                Sign Up
-              </Nav.Link>
-            </Nav>
-          )}
+          <Container>
+            <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+            {this.state.isLoggedIn ? (
+              <Nav className="nav-links">
+                <Nav.Link onClick={this.handleLogout}>Logout</Nav.Link>{" "}
+              </Nav>
+            ) : (
+              <Nav className="nav-links">
+                <Nav.Link onClick={() => this.handleOpen("Login")}>
+                  Login
+                </Nav.Link>
+                <Nav.Link onClick={() => this.handleOpen("Sign Up")}>
+                  Sign Up
+                </Nav.Link>
+              </Nav>
+            )}
+          </Container>
         </Navbar>
 
         <Modal show={this.state.show} onHide={this.handleClose}>

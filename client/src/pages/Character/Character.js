@@ -95,7 +95,7 @@ class Character extends Component {
 
     return (
       <Row>
-        <h1>Character Page for {this.state.characterName}</h1>
+        <h1>{this.state.characterName}</h1>
         <InputGroup className="mb-3">
           <FormControl
             placeholder="Start typing here to search the spell list..."
