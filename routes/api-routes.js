@@ -81,18 +81,28 @@ module.exports = (app) => {
     else {
       db.Characters.findOne({
         id: req.params.characterId
-      }).then(response => {
-        if(response.userId !== req.user.id) {
+      }).then(characterResponse => {
+        if(characterResponse.userId !== req.user.id) {
           return res.json({ status: false });
         }
         else {
-          const { characterName, characterLevel, characterRace, characterClass } = response;
-          res.json({
-            characterName, 
-            characterLevel, 
-            characterRace, 
-            characterClass,
-            status: true
+          db.CharacterSpells.findAll({ 
+            where: {
+              characterId: req.params.characterId 
+            }}).then(spellData => {
+            const spellIdArr = spellData.map((element) => element.spellId);
+            db.Spells.findAll({ 
+              where: {
+                id: { $in: spellIdArr }
+              }
+            }).then((spellsArr) => {
+              const { characterName } = characterResponse;
+              res.json({
+                characterName,
+                status: true,
+                spellsArr
+              });
+            });                       
           });
         }
       });
@@ -152,10 +162,7 @@ module.exports = (app) => {
             });                       
           });
         });
-      }
-      // If we don't find anything we need to scrape the website
-      // Update the CharacterSpells table with the new association
-      
+      }      
     });
   });
 

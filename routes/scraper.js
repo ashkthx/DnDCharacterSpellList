@@ -11,7 +11,7 @@ const scraper = (editedName, cb) => {
     const $ = cheerio.load(response.data);
     const spellTitle = $(".page-content .row .col-md-12 h1").text();
     if (!editedName.includes("-ritual") && spellTitle === "") {
-      return scraper(editedName + "-ritual");
+      return scraper(editedName + "-ritual", cb);
     }
     let classes = [];
     let level, casting_time, range, components, duration, description, higher_level;

@@ -26,22 +26,22 @@ app.use(passport.session());
 require("./routes/api-routes.js")(app);
 
 // Database sync
-db.sequelize.sync({ force: true }).then(function() {
-  db.User.create({
-    name: "Ashley",
-    email: "ash@ash.com",
-    password: "asdf"
-  }).then(() => {
-    db.Characters.create({
-      userId: 1,
-      characterName: "Victra au Bast",
-      characterLevel: 6,
-      characterRace: "Half Elf",
-      characterClass: "Warlock"
+db.sequelize.sync().then(function() {
+  // db.User.create({
+  //   name: "Ashley",
+  //   email: "ash@ash.com",
+  //   password: "asdf"
+  // }).then(() => {
+  //   db.Characters.create({
+  //     userId: 1,
+  //     characterName: "Victra au Bast",
+  //     characterLevel: 6,
+  //     characterRace: "Half Elf",
+  //     characterClass: "Warlock"
     }).then(() => {
       app.listen(PORT, function() {
         console.log("==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.", PORT, PORT);
       });
     });
-  });
-});
+//   });
+// });
