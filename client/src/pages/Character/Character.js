@@ -35,6 +35,7 @@ class Character extends Component {
       spellName: this.state.spellName
     };
     API.spellAdd(apiObj).then(response => {
+      console.log(response.data);
       this.setState({
         spellsArr: response.data
       });

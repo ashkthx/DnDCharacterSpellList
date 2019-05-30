@@ -1,6 +1,7 @@
 // Requires
-var db = require("../models");
-var passport = require("../config/passport");
+const db = require("../models");
+const passport = require("../config/passport");
+const scrapper = require("./scraper");
 
 module.exports = (app) => {
   // Login
@@ -102,13 +103,59 @@ module.exports = (app) => {
   app.post("/api/spell/add", (req, res) => {
     // Make string lowercase and remove special characters
     const editedSpellName = req.body.spellName.toLowerCase().replace(/[^\w\s]/gi, "");
-    db.Spells.findOne({ editedName: editedSpellName }).then(spellsResponse => {
-      console.log(editedSpellName);
+    db.Spells.findOne({ 
+      where: {
+        editedName: editedSpellName
+      }
+    }).then(spellsResponse => {
+      console.log(spellsResponse);
+      if (!spellsResponse) {
+        scrapper(editedSpellName, (spellObj) => {
+          db.Spells.create(spellObj).then((newSpell) => {
+            db.CharacterSpells.create({
+              characterId: req.body.characterId,
+              spellId: newSpell.id
+            }).then(() => {
+              db.CharacterSpells.findAll({ 
+                where: {
+                  characterId: req.body.characterId 
+                }}).then(spellsArr => {
+                const spellIdArr = spellsArr.map((element) => element.spellId);
+                db.Spells.findAll({ 
+                  where: {
+                    id: { $in: spellIdArr }
+                  }
+                }).then((spellData) => {
+                  res.json(spellData);
+                });                       
+              });
+            });
+          });
+        });
+      }
+      else {
+        db.CharacterSpells.create({
+          characterId: req.body.characterId,
+          spellId: spellsResponse.id
+        }).then(() => {
+          db.CharacterSpells.findAll({ 
+            where: {
+              characterId: req.body.characterId 
+            }}).then(spellsArr => {
+            const spellIdArr = spellsArr.map((element) => element.spellId);
+            db.Spells.findAll({ 
+              where: {
+                id: { $in: spellIdArr }
+              }
+            }).then((spellData) => {
+              res.json(spellData);
+            });                       
+          });
+        });
+      }
       // If we don't find anything we need to scrape the website
       // Update the CharacterSpells table with the new association
-      db.CharacterSpells.findAll({ characterId: req.body.characterId }).then(spellsArr => {
-        res.json(spellsArr);
-      });
+      
     });
   });
 

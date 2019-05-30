@@ -3,22 +3,19 @@ module.exports = function(sequelize, DataTypes) {
   var Spells = sequelize.define("Spells", {
     editedName: {
       type: DataTypes.STRING,
-      allowNull: false
+      //allowNull: false
     },
-    name: {
+    spellTitle: {
       type: DataTypes.STRING,
-      allowNull: false
+      //allowNull: false
     },
     description: {
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
     },
     level: {
-      type: DataTypes.INTEGER
-    },
-    duration: {
       type: DataTypes.STRING
     },
-    school: {
+    duration: {
       type: DataTypes.STRING
     },
     components: {
@@ -27,20 +24,14 @@ module.exports = function(sequelize, DataTypes) {
     range: {
       type: DataTypes.STRING
     },
-    page: {
+    classes: {
       type: DataTypes.STRING
     },
-    concentration: {
+    casting_time: {
       type: DataTypes.STRING
     },
-    ritual: {
-      type: DataTypes.STRING
-    },
-    class: {
-      type: DataTypes.STRING
-    },
-    castingTime: {
-      type: DataTypes.STRING
+    higher_level: {
+      type: DataTypes.TEXT
     }
   });
   return Spells;

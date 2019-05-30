@@ -23,7 +23,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-require("./routes/html-routes.js")(app);
 require("./routes/api-routes.js")(app);
 
 // Database sync
