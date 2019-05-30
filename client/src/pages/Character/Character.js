@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import Badge from "react-bootstrap/Badge";
 import Row from "react-bootstrap/Row";
 import { Redirect } from "react-router-dom";
 import API from "../../utils/API";
+import SpellCard from "../../components/SpellCard";
 import "./Character.css";
 
 class Character extends Component {
@@ -85,24 +84,7 @@ class Character extends Component {
         </InputGroup>
 
         {this.state.spellsArr.map((spell, i) => {
-          return(
-            <Card bsPrefix="card spell-card-body" key={i} bg="dark" text="white" style={{ width: "18rem" }}>
-              <Card.Body>
-                <Card.Title>
-                <span className="spell-title">{spell.spellTitle}</span>
-                <Badge onClick={() => this.handleDelete(spell.id)} variant="light">X</Badge>
-                </Card.Title>
-                  <Card.Text>
-                    Level: {spell.level} 
-                    Range: {spell.range}
-                    Duration: {spell.duration}
-                    Casting Time:{spell.casting_time}
-                    Components: {spell.components}
-                    Description: {spell.description}
-                  </Card.Text>
-              </Card.Body>
-            </Card>
-          )
+          return <SpellCard {...spell} handleDelete={this.handleDelete} key={i} />
         })}
       </Row>
     );
