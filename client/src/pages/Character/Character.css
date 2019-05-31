@@ -2,6 +2,10 @@
   
 } */
 
+.characterh1 {
+  width: 100%;
+}
+
 .card-title {
   display: flex;
 }

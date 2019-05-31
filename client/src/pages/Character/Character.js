@@ -7,6 +7,7 @@ import { Redirect } from "react-router-dom";
 import API from "../../utils/API";
 import SpellCard from "../../components/SpellCard";
 import LevelWrapper from "../../components/LevelWrapper/LevelWrapper";
+import FormComplete from "../../components/FormComplete";
 import "./Character.css";
 
 class Character extends Component {
@@ -45,7 +46,8 @@ class Character extends Component {
     API.spellAdd(apiObj).then(response => {
       console.log(response.data);
       this.setState({
-        spellsArr: response.data
+        spellsArr: response.data,
+        spellName: ""
       });
     });
   };
@@ -95,22 +97,12 @@ class Character extends Component {
 
     return (
       <Row>
-        <h1>{this.state.characterName}</h1>
-        <InputGroup className="mb-3">
-          <FormControl
-            placeholder="Start typing here to search the spell list..."
-            aria-label="Spell search"
-            aria-describedby="basic-addon2"
-            onChange={this.handleInputChange}
-            name="spellName"
-            value={this.state.spellName}
+        <h1 className="characterh1">{this.state.characterName}</h1>
+          <FormComplete 
+            spellName={this.state.spellName}
+            handleInputChange={this.handleInputChange} 
+            handleSubmit={this.handleSubmit}
           />
-          <InputGroup.Append>
-            <Button onClick={this.handleSubmit} variant="outline-secondary">
-              Search
-            </Button>
-          </InputGroup.Append>
-        </InputGroup>
         {this.renderSpells()}
       </Row>
     );
