@@ -13,9 +13,10 @@ function SpellCard(props) {
         </Card.Title>
         <Card.Text>
           Level: {props.level}<br />
+          Classes: {props.classes}<br />
           Range: {props.range}<br />
+          Casting Time: {props.casting_time}<br />
           Duration: {props.duration}<br />
-          Casting Time:{props.casting_time}<br />
           Components: {props.components}<br /><br />
           Description: {props.description}
         </Card.Text>

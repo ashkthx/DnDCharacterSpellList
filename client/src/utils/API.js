@@ -34,6 +34,10 @@ export default {
         console.log("API: characterData");
         return axios.get("/api/character/data/" + characterId);
     },
+    characterDelete: (characterId) => {
+        console.log("API: characterDelete");
+        return axios.post("/api/character/delete",  { characterId });
+    },
 
     // Spell methods
     spellAdd: (spellData) => {

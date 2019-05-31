@@ -6,9 +6,11 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
+import Badge from "react-bootstrap/Badge";
 import API from "../../utils/API";
 import Row from "react-bootstrap/Row";
 import "./Members.css";
+import { EventEmitter } from "events";
 
 class Members extends Component {
   state = {
@@ -93,6 +95,13 @@ class Members extends Component {
     this.props.history.push("/character/" + characterId);
   };
 
+  handleDelete = (event, characterId) => {
+    event.stopPropagation();
+    API.characterDelete(characterId).then(response => {
+      this.setState({ characterArr: response.data });
+    });
+  };
+
   render() {
     if (!this.state.isLoggedIn) {
       return <Redirect to="/" />;
@@ -109,7 +118,10 @@ class Members extends Component {
             {this.state.characterArr.map((element, i) => {
               return <Card key={i} border="dark" bsPrefix="card character-card" onClick={() => this.handleCardClick(element.id)}>
                 <Card.Body>
-                  <Card.Title>{element.characterName}</Card.Title>
+                  <Card.Title>
+                    <span className="character-title">{element.characterName}</span>
+                    <Badge onClick={(event) => this.handleDelete(event, element.id)} variant="light">X</Badge>
+                  </Card.Title>
                   <Card.Text>
                     Level {element.characterLevel} {element.characterRace} {element.characterClass}
                   </Card.Text>

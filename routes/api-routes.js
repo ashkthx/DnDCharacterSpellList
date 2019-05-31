@@ -115,6 +115,27 @@ module.exports = (app) => {
     }
   });
 
+  // Delete character
+  app.post("/api/character/delete", (req, res) => {
+    db.Characters.destroy({
+      where: {
+        id: req.body.characterId
+      }
+    }).then(() => {
+      db.CharacterSpells.destroy({
+        where: req.body
+      }).then(() => {
+        db.Characters.findAll({
+          where: {
+            userId: req.user.id
+          }
+        }).then((dbResponse) => {
+          res.json(dbResponse);
+        });
+      });
+    });
+  });
+
   // Add spell
   app.post("/api/spell/add", (req, res) => {
     // Make string lowercase and remove special characters

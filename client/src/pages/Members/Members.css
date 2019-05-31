@@ -8,3 +8,8 @@
   color: white;
   background-color: #343a40;
 }
+
+.character-title {
+  display: flex;
+  flex-grow: 1
+}
