@@ -1,7 +1,7 @@
 // Requires
 const db = require("../models");
 const passport = require("../config/passport");
-const scrapper = require("./scraper");
+const scraper = require("./scraper");
 
 module.exports = (app) => {
   // Login
@@ -14,7 +14,7 @@ module.exports = (app) => {
     console.log(req.body);
     db.User.create(req.body).then(() => {
       res.redirect(307, "/api/user/login");
-    }).catch(function(err) {
+    }).catch((err) => {
       console.log(err);
       // Error handling
       const errMessage = err.errors[0].message;
@@ -126,7 +126,7 @@ module.exports = (app) => {
     }).then(spellsResponse => {
       console.log(spellsResponse);
       if (!spellsResponse) {
-        scrapper(editedSpellName, (spellObj) => {
+        scraper(editedSpellName, (spellObj) => {
           db.Spells.create(spellObj).then((newSpell) => {
             db.CharacterSpells.create({
               characterId: req.body.characterId,
