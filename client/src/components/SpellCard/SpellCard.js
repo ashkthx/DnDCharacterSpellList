@@ -5,18 +5,18 @@ import "./SpellCard.css";
 
 function SpellCard(props) {
   return (
-    <Card bsPrefix="card spell-card-body" bg="dark" text="white">
+    <Card className="mb-3" bg="dark" text="white">
       <Card.Body>
         <Card.Title>
           <span className="spell-title">{props.spellTitle}</span>
           <Badge onClick={() => props.handleDelete(props.id)} variant="light">X</Badge>
         </Card.Title>
         <Card.Text>
-          Level: {props.level} 
-          Range: {props.range}
-          Duration: {props.duration}
-          Casting Time:{props.casting_time}
-          Components: {props.components}
+          Level: {props.level}<br />
+          Range: {props.range}<br />
+          Duration: {props.duration}<br />
+          Casting Time:{props.casting_time}<br />
+          Components: {props.components}<br /><br />
           Description: {props.description}
         </Card.Text>
       </Card.Body>

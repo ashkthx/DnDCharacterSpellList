@@ -4,7 +4,7 @@ import "./LevelWrapper.css";
 
 function LevelWrapper(props) {
   return (
-    <Card>
+    <Card className="mb-2">
       <Card.Body>
         <Card.Title>{props.level === "Cantrip" ? "Cantrip" : `Level ${props.level}`}</Card.Title>
           {props.children}          

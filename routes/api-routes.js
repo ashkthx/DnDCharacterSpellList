@@ -42,7 +42,11 @@ module.exports = (app) => {
     }
     else {      
       // Otherwise send back the user's email and character info
-      db.Characters.findAll({ userId: req.user.id }).then(response => {
+      db.Characters.findAll({ 
+        where: {
+          userId: req.user.id
+        }
+      }).then(response => {
         res.json({
           name: req.user.name,
           characterArr: response
@@ -80,7 +84,9 @@ module.exports = (app) => {
     } 
     else {
       db.Characters.findOne({
-        id: req.params.characterId
+        where: {
+          id: req.params.characterId
+        }
       }).then(characterResponse => {
         if(characterResponse.userId !== req.user.id) {
           return res.json({ status: false });
