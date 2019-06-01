@@ -115,7 +115,7 @@ class Members extends Component {
             <Button onClick={this.handleOpen} variant="dark">
               Create a New Character
             </Button>
-            {this.state.characterArr.map((element, i) => {
+            {this.state.characterArr.reverse().map((element, i) => {
               return <Card key={i} border="dark" bsPrefix="card character-card" onClick={() => this.handleCardClick(element.id)}>
                 <Card.Body>
                   <Card.Title>
