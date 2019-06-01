@@ -7,8 +7,6 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import Dropdown from "react-bootstrap/Dropdown";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
 import { withRouter, Link } from "react-router-dom";
 import "./Nav.css";
 
@@ -162,9 +160,6 @@ class Header extends Component {
         <Navbar fixed="top" bg="dark" variant="dark">
           <Container>
             <Navbar.Brand as={Link} to="/members" bsPrefix="navbar-brand">Spell Tracker</Navbar.Brand>
-            <Nav className="mr-auto">
-              
-            </Nav>
             {this.state.isLoggedIn ? (
               <Nav className="nav-links">
                 <Nav.Link onClick={this.handleLogout}>Logout</Nav.Link>{" "}
