@@ -21,7 +21,10 @@ class Home extends Component {
     API.spellSingle(this.state.spellName).then(response => {
       const newSpellsArr = this.state.spellsArr;
       newSpellsArr.push(response.data);
-      this.setState({ spellsArr: newSpellsArr});
+      this.setState({ 
+        spellsArr: newSpellsArr,
+        spellName: ""
+      });
     })
   };
 
