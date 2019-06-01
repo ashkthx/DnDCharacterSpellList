@@ -17,9 +17,9 @@ class Header extends Component {
     isLoggedIn: false,
 
     // Form inputs
-    name: "Ashley",
-    email: "ash@ash.com",
-    password: "asdf",
+    name: "",
+    email: "",
+    password: "",
     confirm: "",
 
     // Validate
