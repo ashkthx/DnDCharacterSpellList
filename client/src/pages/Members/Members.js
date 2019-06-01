@@ -10,7 +10,6 @@ import Badge from "react-bootstrap/Badge";
 import API from "../../utils/API";
 import Row from "react-bootstrap/Row";
 import "./Members.css";
-import { EventEmitter } from "events";
 
 class Members extends Component {
   state = {

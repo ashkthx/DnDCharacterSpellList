@@ -213,5 +213,28 @@ module.exports = (app) => {
       });
     });
   });
+
+  // Search single spell from homepage
+  app.post("/api/spell/single", (req, res) => {
+    // Make string lowercase and remove special characters
+    const editedSpellName = req.body.spellName.toLowerCase().replace(/[^\w\s]/gi, "");
+    db.Spells.findOne({ 
+      where: {
+        editedName: editedSpellName
+      }
+    }).then(spellsResponse => {
+      console.log(spellsResponse);
+      if (!spellsResponse) {
+        scraper(editedSpellName, (spellObj) => {
+          db.Spells.create(spellObj).then((newSpell) => {
+            res.json(newSpell);
+          });
+        });
+      }
+      else {
+        res.json(spellsResponse);
+      }      
+    });
+  });
   
 };

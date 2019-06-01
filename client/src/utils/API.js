@@ -47,5 +47,9 @@ export default {
     spellDelete: (spellData) => {
         console.log("API: spellDelete");
         return axios.post("/api/spell/delete", spellData);
+    },
+    spellSingle: (spellName) => {
+        console.log("API: spellSingle");
+        return axios.post("/api/spell/single", { spellName });
     }
 };
