@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import Members from "./pages/Members";
-import Login from "./pages/Login";
 import Character from "./pages/Character";
 import Modals from "./components/Modals";
 import API from "./utils/API.js"
@@ -18,6 +17,7 @@ import "./App.css"
 class App extends Component {
   state = {
     showAuth: false,
+    type: "",
     showChar: false,
     isLoggedIn: false
   };
@@ -27,26 +27,30 @@ class App extends Component {
       this.setState({
         isLoggedIn: response.data
       });
-    })
+    });
   };
 
-  updateAppState = propName => {
-    this.setState({ [propName]: !this.state[propName] });
+  updateAppState = stateObj => {
+    this.setState(stateObj);
   };
 
   render() {
+    const defaultProps = {
+      isLoggedIn: this.state.isLoggedIn,
+      updateAppState: this.updateAppState
+    };
+
     return (
       <Router>
         <Container bsPrefix="container app-container">
-          <Nav isLoggedIn={this.state.isLoggedIn} />
+          <Nav {...defaultProps} />
           <Switch>
-            <Route exact path="/" render={props => <Home {...props} updateAppState={this.updateAppState} />} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/members" component={Members} />
-            <Route exact path="/character/:characterId" component={Character} />
+            <Route exact render={props => <Home {...props} {...defaultProps} />} path="/" />
+            <Route exact render={props => <Members {...props} {...defaultProps} />} path="/members" />
+            <Route exact render={props => <Character {...props} {...defaultProps} />} path="/character/:characterId" />
             {/* <Route component={NoMatch} /> */}
           </Switch>
-          <Modals />
+          <Modals showAuth={this.state.showAuth} showChar={this.state.showChar} type={this.state.type} updateAppState={this.updateAppState} />
         </Container>
       </Router>
     );

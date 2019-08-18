@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
@@ -15,7 +16,6 @@ props.handleCharSubmit
 class Modals extends Component {
    state = {
       // Auth inputs
-      type: "", // "login" displays the login modal, "signup" displays the sign up modal
       name: "",
       email: "",
       password: "",
@@ -42,7 +42,7 @@ class Modals extends Component {
    // Signup button
    handleAuthSubmit = event => {
       event.preventDefault();
-      if (this.state.type === "Sign Up") {
+      if (this.props.type === "Sign Up") {
          if (!this.state.name.trim() || !this.state.email.trim() || !this.state.password || !this.state.confirm) {
             return this.setState({ errorMessage: "Please fill in all fields" });
          }
@@ -57,7 +57,10 @@ class Modals extends Component {
          const { name, email, password } = this.state;
          const userObj = { name, email, password };
          API.userSignup(userObj)
-            .then(this.props.authCallback)
+            .then(() => {
+               this.props.updateAppState({ showAuth: false, isLoggedIn: true });
+               this.props.history.push("/members");
+            })
             .catch(err => {
                this.setState({
                   // err.response.data comes from api-routes.js
@@ -76,7 +79,10 @@ class Modals extends Component {
          const { email, password } = this.state;
          const userObj = { email, password };
          API.userLogin(userObj)
-            .then(this.props.authCallback)
+            .then(() => {
+               this.props.updateAppState({ showAuth: false, isLoggedIn: true });
+               this.props.history.push("/members");
+            })
             .catch(err => {
                this.setState({
                   errorMessage: "Email or password is incorrect",
@@ -91,13 +97,13 @@ class Modals extends Component {
       return (
          <>
             {/* Auth Modal */}
-            <Modal show={this.props.showAuth} onHide={() => this.handleClose("showAuth")}>
+            <Modal show={this.props.showAuth} onHide={() => this.props.updateAppState({ showAuth: false })}>
                <Modal.Header closeButton>
-                  <Modal.Title>{this.state.type}</Modal.Title>
+                  <Modal.Title>{this.props.type}</Modal.Title>
                </Modal.Header>
                <Modal.Body>
-                  <Form onSubmit={this.props.handleAuthSubmit}>
-                     {this.state.type === "Sign Up" && (
+                  <Form onSubmit={this.handleAuthSubmit}>
+                     {this.props.type === "Sign Up" && (
                         <Form.Group controlId="formGroupName">
                            <Form.Label>Your Name</Form.Label>
                            <Form.Control
@@ -129,7 +135,7 @@ class Modals extends Component {
                            placeholder="Password"
                         />
                      </Form.Group>
-                     {this.state.type === "Sign Up" && (
+                     {this.props.type === "Sign Up" && (
                         <Form.Group controlId="formGroupConfirm">
                            <Form.Label>Confirm Password</Form.Label>
                            <Form.Control
@@ -147,19 +153,19 @@ class Modals extends Component {
                   {this.state.errorMessage && (
                      <div className="feedback">{this.state.errorMessage}</div>
                   )}
-                  <Button variant="secondary" onClick={() => this.handleClose("showAuth")}>
+                  <Button variant="secondary" onClick={() => this.props.updateAppState({ showAuth: false })}>
                      Close
                </Button>
-                  <Button variant="dark" onClick={this.props.handleAuthSubmit}>
-                     {this.state.type}
+                  <Button variant="dark" onClick={this.handleAuthSubmit}>
+                     {this.props.type}
                   </Button>
                </Modal.Footer>
             </Modal>
 
             {/* Character Modal */}
-            <Modal show={this.props.showChar} onHide={() => this.handleClose("showChar")}>
+            <Modal show={this.props.showChar} onHide={() => this.props.updateAppState({ showChar: false })}>
                <Modal.Header closeButton>
-                  <Modal.Title>New {this.state.type}</Modal.Title>
+                  <Modal.Title>New {this.props.type}</Modal.Title>
                </Modal.Header>
                <Modal.Body>
                   <Form onSubmit={this.props.handleCharSubmit}>
@@ -201,7 +207,7 @@ class Modals extends Component {
                   {this.state.errorMessage && (
                      <div className="feedback">{this.state.errorMessage}</div>
                   )}
-                  <Button variant="secondary" onClick={() => this.handleClose("showChar")}>
+                  <Button variant="secondary" onClick={() => this.props.updateAppState({ showChar: false })}>
                      Close
                </Button>
                   <Button variant="dark" onClick={this.props.handleCharSubmit}>
@@ -214,4 +220,4 @@ class Modals extends Component {
    };
 };
 
-export default Modals;
+export default withRouter(Modals);

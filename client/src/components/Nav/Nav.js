@@ -8,44 +8,15 @@ import { withRouter, Link } from "react-router-dom";
 import "./Nav.css";
 
 class Header extends Component {
-  state = {
-
-  };
-
   handleLogout = () => {
     API.userLogout()
-      .then(response => {
-        this.setState(
-          {
-            show: false,
-            type: "",
-            isLoggedIn: false,
-            name: "",
-            email: "",
-            password: "",
-            confirm: ""
-          },
-          () => this.props.history.push("/")
-        );
+      .then(() => {
+        this.props.updateAppState({ isLoggedIn: false });
+        this.props.history.push("/");
       })
       .catch(err => {
         console.log(err);
       });
-  };
-
-  authCallback = () => {
-    this.setState(
-      {
-        show: false,
-        type: "",
-        isLoggedIn: true,
-        name: "",
-        email: "",
-        password: "",
-        confirm: ""
-      },
-      () => this.props.history.push("/members")
-    );
   };
 
   render() {
@@ -53,16 +24,16 @@ class Header extends Component {
       <Navbar fixed="top" bg="dark" variant="dark">
         <Container>
           <Navbar.Brand as={Link} to="/members" bsPrefix="navbar-brand">Spell Tracker</Navbar.Brand>
-          {this.state.isLoggedIn ? (
+          {this.props.isLoggedIn ? (
             <Nav className="nav-links">
               <Nav.Link onClick={this.handleLogout}>Logout</Nav.Link>{" "}
             </Nav>
           ) : (
               <Nav className="nav-links">
-                <Nav.Link onClick={() => this.handleOpen("Login")}>
+                <Nav.Link onClick={() => this.props.updateAppState({ showAuth: true, type: "Login" })}>
                   Login
                 </Nav.Link>
-                <Nav.Link onClick={() => this.handleOpen("Sign Up")}>
+                <Nav.Link onClick={() => this.props.updateAppState({ showAuth: true, type: "Sign Up" })}>
                   Sign Up
                 </Nav.Link>
               </Nav>

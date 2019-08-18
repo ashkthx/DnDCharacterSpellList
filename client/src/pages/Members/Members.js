@@ -100,7 +100,7 @@ class Members extends Component {
   };
 
   render() {
-    if (!this.state.isLoggedIn) {
+    if (!this.props.isLoggedIn) {
       return <Redirect to="/" />;
     }
 
