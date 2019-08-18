@@ -1,5 +1,6 @@
 // List of spell names
-export default ["Abi-Dalzim’s Horrid Wilting",
+export default [
+	"Abi-Dalzim’s Horrid Wilting",
 	"Absorb Elements",
 	"Acid Splash",
 	"Aganazzar’s Scorcher",
@@ -460,4 +461,5 @@ export default ["Abi-Dalzim’s Horrid Wilting",
 	"Wrath of Nature",
 	"Wrathful Smite",
 	"Zephyr Strike",
-	"Zone of Truth"];
+	"Zone of Truth"
+];

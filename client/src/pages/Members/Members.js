@@ -1,6 +1,6 @@
 // Dependencies
 import React, { Component } from "react";
-import { Redirect, withRouter } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
@@ -9,13 +9,19 @@ import API from "../../utils/API";
 import "./Members.css";
 
 class Members extends Component {
+  state = {
+    redirectTo: null
+  }
 
   componentDidMount() {
+    if (!this.props.isLoggedIn) {
+      return this.setState({ redirectTo: "/" });
+    }
     this.props.getUserData();
   }
 
   handleCardClick = characterId => {
-    this.props.history.push("/character/" + characterId);
+    this.setState({ redirectTo: "/character/" + characterId });
   };
 
   handleDelete = (event, characterId) => {
@@ -26,8 +32,8 @@ class Members extends Component {
   };
 
   render() {
-    if (!this.props.isLoggedIn) {
-      return <Redirect to="/" />;
+    if (this.state.redirectTo) {
+      return <Redirect to={this.state.redirectTo} />;
     }
 
     return (
@@ -57,4 +63,4 @@ class Members extends Component {
 }
 
 // Export
-export default withRouter(Members);
+export default Members;

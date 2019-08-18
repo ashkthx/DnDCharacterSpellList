@@ -9,43 +9,30 @@ import "./Character.css";
 
 class Character extends Component {
   state = {
-    isLoggedIn: true,
-    spellName: "",
-    characterName: "",
-    spellsArr: []
+    name: "",
+    characterName: ""
   };
 
   componentDidMount() {
     API.characterData(this.props.match.params.characterId).then(response => {
-      if (!response.data.status) {
-        this.setState({ isLoggedIn: false });
-      }
-      console.log(response.data);
       const { characterName, spellsArr } = response.data;
-      this.setState({
-        characterName,
-        spellsArr
-      });
+      this.setState({ characterName }, () => this.props.updateAppState({ spellsArr }));
     });
   }
 
   handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
+    const { value } = event.target;
+    this.setState({ name: value });
   };
 
   handleSubmit = event => {
     event.preventDefault();
     const apiObj = {
       characterId: this.props.match.params.characterId,
-      spellName: this.state.spellName
+      spellName: this.state.name
     };
     API.spellAdd(apiObj).then(response => {
-      console.log(response.data);
-      this.setState({
-        spellsArr: response.data,
-        spellName: ""
-      });
+      this.setState({ name: "" }, () => this.props.updateAppState({ spellsArr: response.data }));
     });
   };
 
@@ -55,14 +42,14 @@ class Character extends Component {
       spellId
     }
     API.spellDelete(deleteObj).then(response => {
-      this.setState({ spellsArr: response.data });
+      this.props.updateAppState({ spellsArr: response.data });
     });
   };
 
   renderSpells = () => {
     const spellsObj = {};
 
-    this.state.spellsArr.forEach((element, i) => {
+    this.props.spellsArr.forEach((element, i) => {
       if (spellsObj[element.level]) {
         spellsObj[element.level].push(<SpellCard {...element} handleDelete={this.handleDelete} key={i} />);
       }
@@ -88,7 +75,7 @@ class Character extends Component {
   };
 
   render() {
-    if (!this.state.isLoggedIn) {
+    if (!this.props.isLoggedIn) {
       return <Redirect to="/" />;
     }
 
@@ -96,7 +83,8 @@ class Character extends Component {
       <Row>
         <h1 className="characterh1">{this.state.characterName}</h1>
         <FormComplete
-          spellName={this.state.spellName}
+          list="spell"
+          name="name"
           handleInputChange={this.handleInputChange}
           handleSubmit={this.handleSubmit}
         />

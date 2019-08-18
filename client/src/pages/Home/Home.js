@@ -1,6 +1,7 @@
 // Dependencies
 import React, { Component } from "react";
 import Jumbotron from "react-bootstrap/Jumbotron";
+import { Redirect } from "react-router-dom";
 import FormComplete from "../../components/FormComplete";
 import SpellCard from "../../components/SpellCard";
 import LevelWrapper from "../../components/LevelWrapper";
@@ -9,20 +10,20 @@ import "./Home.css";
 
 class Home extends Component {
   state = {
-    spellName: ""
+    name: ""
   };
 
   handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
+    const { value } = event.target;
+    this.setState({ name: value });
   };
 
   handleSubmit = event => {
-    API.spellSingle(this.state.spellName).then(response => {
+    API.spellSingle(this.state.name).then(response => {
       const newSpellsArr = this.props.spellsArr;
       newSpellsArr.push(response.data);
       this.setState({
-        spellName: ""
+        name: ""
       });
       this.props.updateAppState({ spellsArr: newSpellsArr, homeSearched: true });
     })
@@ -66,6 +67,10 @@ class Home extends Component {
   };
 
   render() {
+    if (this.props.isLoggedIn) {
+      return <Redirect to="/members" />
+    }
+
     return (
       <div className="home-wrapper">
         <Jumbotron>
@@ -79,7 +84,8 @@ class Home extends Component {
           </h6>
         </Jumbotron>
         <FormComplete
-          spellName={this.state.spellName}
+          list="spell"
+          name="name"
           handleInputChange={this.handleInputChange}
           handleSubmit={this.handleSubmit} />
         {this.renderSpells()}
