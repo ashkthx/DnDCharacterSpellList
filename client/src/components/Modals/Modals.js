@@ -58,15 +58,22 @@ class Modals extends Component {
          const userObj = { name, email, password };
          API.userSignup(userObj)
             .then(({ data }) => {
-               const stateObj = { showAuth: false, isLoggedIn: true, name: data.name };
-               if (this.props.newCharConfirm) {
-                  stateObj.showChar = true;
-                  this.props.updateAppState(stateObj);
-               }
-               else {
-                  this.props.updateAppState(stateObj);
-                  this.props.history.push("/members");
-               }
+               this.setState({
+                  name: "",
+                  email: "",
+                  password: "",
+                  confirm: ""
+               }, () => {
+                  const stateObj = { showAuth: false, isLoggedIn: true, name: data.name };
+                  if (this.props.newCharConfirm) {
+                     stateObj.showChar = true;
+                     this.props.updateAppState(stateObj);
+                  }
+                  else {
+                     this.props.updateAppState(stateObj);
+                     this.props.history.push("/members");
+                  }
+               });
             })
             .catch(err => {
                this.setState({
@@ -87,15 +94,22 @@ class Modals extends Component {
          const userObj = { email, password };
          API.userLogin(userObj)
             .then(({ data }) => {
-               const stateObj = { showAuth: false, isLoggedIn: true, name: data.name };
-               if (this.props.newCharConfirm) {
-                  stateObj.showChar = true;
-                  this.props.updateAppState(stateObj);
-               }
-               else {
-                  this.props.updateAppState(stateObj);
-                  this.props.history.push("/members");
-               }
+               this.setState({
+                  name: "",
+                  email: "",
+                  password: "",
+                  confirm: ""
+               }, () => {
+                  const stateObj = { showAuth: false, isLoggedIn: true, name: data.name };
+                  if (this.props.newCharConfirm) {
+                     stateObj.showChar = true;
+                     this.props.updateAppState(stateObj);
+                  }
+                  else {
+                     this.props.updateAppState(stateObj);
+                     this.props.history.push("/members");
+                  }
+               });
             })
             .catch(err => {
                this.setState({
