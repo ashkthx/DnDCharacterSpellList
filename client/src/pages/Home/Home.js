@@ -1,5 +1,6 @@
 // Dependencies
 import React, { Component } from "react";
+import Jumbotron from "react-bootstrap/Jumbotron";
 import FormComplete from "../../components/FormComplete";
 import SpellCard from "../../components/SpellCard";
 import LevelWrapper from "../../components/LevelWrapper";
@@ -67,15 +68,20 @@ class Home extends Component {
   render() {
     return (
       <div className="home-wrapper">
+        <Jumbotron>
+          <h1>Welcome to Spell Tracker</h1>
+          <h6>Use the search field below to look up spells.
+            {this.props.spellsArr.length ?
+              <> You can now <span className="auth" onClick={() => this.props.updateAppState({ showAuth: true, type: "Login" })}>Login</span> or <span className="auth" onClick={() => this.props.updateAppState({ showAuth: true, type: "Sign Up" })}>Sign Up</span> for a new account to save these spells for a new Character</>
+              :
+              " After you've looked up some, you'll have the option to save your selections under a new character."
+            }
+          </h6>
+        </Jumbotron>
         <FormComplete
           spellName={this.state.spellName}
           handleInputChange={this.handleInputChange}
           handleSubmit={this.handleSubmit} />
-        {this.props.spellsArr.length ? (
-          <h4>
-            <span className="auth" onClick={() => this.props.updateAppState({ showAuth: true, type: "Login" })}>Login</span> or <span className="auth" onClick={() => this.props.updateAppState({ showAuth: true, type: "Sign Up" })}>Sign Up</span> to save these spells for a new Character
-          </h4>
-        ) : ""}
         {this.renderSpells()}
       </div>
     );
