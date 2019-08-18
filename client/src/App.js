@@ -55,7 +55,7 @@ class App extends Component {
           <Switch>
             <Route exact render={props => <Home {...props} {...defaultProps} {...homeProps} />} path="/" />
             <Route exact render={props => <Members {...props} {...defaultProps} {...membersProps} />} path="/members" />
-            <Route exact render={props => <Character {...props} {...defaultProps} />} path="/character/:characterId" />
+            <Route exact render={props => <Character {...props} {...defaultProps} spellsArr={this.state.spellsArr} />} path="/character/:characterId" />
             {/* <Route component={NoMatch} /> */}
           </Switch>
           <Modals {...modalProps} />

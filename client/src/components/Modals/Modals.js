@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import FormComplete from "../FormComplete"
 import API from "../../utils/API.js";
 
 /*
@@ -76,6 +77,7 @@ class Modals extends Component {
                });
             })
             .catch(err => {
+               console.log(err.response);
                this.setState({
                   // err.response.data comes from api-routes.js
                   errorMessage: err.response.data,
@@ -236,7 +238,7 @@ class Modals extends Component {
             {/* Character Modal */}
             <Modal show={this.props.showChar} onHide={() => this.props.updateAppState({ showChar: false })}>
                <Modal.Header closeButton>
-                  <Modal.Title>New {this.props.type}</Modal.Title>
+                  <Modal.Title>New Character</Modal.Title>
                </Modal.Header>
                <Modal.Body>
                   <Form onSubmit={this.handleCharSubmit}>
@@ -250,18 +252,20 @@ class Modals extends Component {
                      </Form.Group>
                      <Form.Group controlId="formCharacterRace">
                         <Form.Label>Race</Form.Label>
-                        <Form.Control
+                        <FormComplete
+                           list="race"
                            name="characterRace"
                            value={this.state.characterRace}
-                           onChange={this.handleInputChange}
+                           handleInputChange={this.handleInputChange}
                         />
                      </Form.Group>
                      <Form.Group controlId="formCharacterClass">
                         <Form.Label>Class</Form.Label>
-                        <Form.Control
+                        <FormComplete
+                           list="class"
                            name="characterClass"
                            value={this.state.characterClass}
-                           onChange={this.handleInputChange}
+                           handleInputChange={this.handleInputChange}
                         />
                      </Form.Group>
                      <Form.Group controlId="formCharacterLevel">

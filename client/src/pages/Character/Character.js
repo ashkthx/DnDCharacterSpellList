@@ -85,6 +85,7 @@ class Character extends Component {
         <FormComplete
           list="spell"
           name="name"
+          value={this.state.name}
           handleInputChange={this.handleInputChange}
           handleSubmit={this.handleSubmit}
         />

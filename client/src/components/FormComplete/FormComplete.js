@@ -1,9 +1,11 @@
 import React from "react";
 import Autocomplete from "react-autocomplete";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
-import Button from "react-bootstrap/Button";
 import spellList from "../../utils/spellList.js";
+import classList from "../../utils/classList.js";
 import raceList from "../../utils/raceList.js";
 import "./FormComplete.css";
 
@@ -43,7 +45,7 @@ function FormComplete(props) {
       list = raceList;
       break;
     case "class":
-      // list = classList;
+      list = classList;
       break;
     default:
       list = spellList;
@@ -65,7 +67,7 @@ function FormComplete(props) {
       menuStyle={styles.menu}
       wrapperStyle={styles.wrapper}
       inputProps={{ name: props.name }}
-      value={props.name}
+      value={props.value}
       onChange={props.handleInputChange}
       onSelect={value => {
         props.handleInputChange({
@@ -75,21 +77,35 @@ function FormComplete(props) {
       shouldItemRender={(item, value) =>
         item.toLowerCase().includes(value.toLowerCase())
       }
-      renderInput={inputProps => (
-        <InputGroup className="mb-3">
-          <FormControl
-            {...inputProps}
-            placeholder="Start typing to search... e.g. Magic Missile"
-            aria-label="Default"
-            aria-describedby="inputGroup-sizing-default"
-          />
-          <InputGroup.Append>
-            <Button onClick={props.handleSubmit} variant="outline-secondary">
-              Search
-            </Button>
-          </InputGroup.Append>
-        </InputGroup>
-      )}
+      renderInput={inputProps => {
+        if (props.list === "spell") {
+          return (
+            <InputGroup className="mb-3">
+              <FormControl
+                {...inputProps}
+                placeholder="Start typing to search... e.g. Magic Missile"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+              />
+              <InputGroup.Append>
+                <Button onClick={props.handleSubmit} variant="outline-secondary">
+                  Search
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
+          );
+        }
+        else {
+          return (
+            <Form.Control
+              {...inputProps}
+              name={props.name}
+              value={props.value}
+              onChange={props.handleInputChange}
+            />
+          );
+        }
+      }}
     />
   );
 }
