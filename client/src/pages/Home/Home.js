@@ -21,7 +21,7 @@ class Home extends Component {
     API.spellSingle(this.state.spellName).then(response => {
       const newSpellsArr = this.state.spellsArr;
       newSpellsArr.push(response.data);
-      this.setState({ 
+      this.setState({
         spellsArr: newSpellsArr,
         spellName: ""
       });
@@ -51,9 +51,9 @@ class Home extends Component {
     orderArr.forEach((element, i) => {
       if (spellsObj[element]) {
         wrapperArr.push(
-        <LevelWrapper level={element} key={i}>
-          {spellsObj[element]}
-        </LevelWrapper>
+          <LevelWrapper level={element} key={i}>
+            {spellsObj[element]}
+          </LevelWrapper>
         )
       }
     });
@@ -61,17 +61,20 @@ class Home extends Component {
     return wrapperArr;
   };
 
-    render() {
-        return (
-          <div>
-            <FormComplete 
-            spellName={this.state.spellName} 
-            handleInputChange={this.handleInputChange} 
-            handleSubmit={this.handleSubmit}/>
-            {this.renderSpells()}
-          </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <FormComplete
+          spellName={this.state.spellName}
+          handleInputChange={this.handleInputChange}
+          handleSubmit={this.handleSubmit} />
+        {
+          // this.state.spellsArr.length && 
+        }
+        {this.renderSpells()}
+      </div>
+    );
+  }
 }
 
 // Export

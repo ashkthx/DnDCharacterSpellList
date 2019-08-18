@@ -11,7 +11,6 @@ module.exports = (app) => {
 
   // Signup
   app.post("/api/user/signup", (req, res) => {
-    console.log(req.body);
     db.User.create(req.body).then(() => {
       res.redirect(307, "/api/user/login");
     }).catch((err) => {
@@ -22,7 +21,7 @@ module.exports = (app) => {
       if (errMessage[0] === "V") {
         newMessage = "Please enter a valid email address"
       } else {
-      newMessage = errMessage.slice(0,1).toUpperCase() + errMessage.slice(1); 
+        newMessage = errMessage.slice(0, 1).toUpperCase() + errMessage.slice(1);
       }
       res.status(422).json(newMessage);
     });
@@ -40,9 +39,9 @@ module.exports = (app) => {
       // The user is not logged in, send back an empty object
       res.json({});
     }
-    else {      
+    else {
       // Otherwise send back the user's email and character info
-      db.Characters.findAll({ 
+      db.Characters.findAll({
         where: {
           userId: req.user.id
         }
@@ -66,7 +65,7 @@ module.exports = (app) => {
   });
 
   // Create character
-  app.post("/api/character/create", (req, res) =>{
+  app.post("/api/character/create", (req, res) => {
     db.Characters.create({
       ...req.body,
       userId: req.user.id
@@ -78,26 +77,27 @@ module.exports = (app) => {
   });
 
   // Get character data from db
-  app.get("/api/character/data/:characterId", (req, res) =>{
+  app.get("/api/character/data/:characterId", (req, res) => {
     if (!req.user) {
       return res.json({ status: false });
-    } 
+    }
     else {
       db.Characters.findOne({
         where: {
           id: req.params.characterId
         }
       }).then(characterResponse => {
-        if(characterResponse.userId !== req.user.id) {
+        if (characterResponse.userId !== req.user.id) {
           return res.json({ status: false });
         }
         else {
-          db.CharacterSpells.findAll({ 
+          db.CharacterSpells.findAll({
             where: {
-              characterId: req.params.characterId 
-            }}).then(spellData => {
+              characterId: req.params.characterId
+            }
+          }).then(spellData => {
             const spellIdArr = spellData.map((element) => element.spellId);
-            db.Spells.findAll({ 
+            db.Spells.findAll({
               where: {
                 id: { $in: spellIdArr }
               }
@@ -108,7 +108,7 @@ module.exports = (app) => {
                 status: true,
                 spellsArr
               });
-            });                       
+            });
           });
         }
       });
@@ -140,12 +140,11 @@ module.exports = (app) => {
   app.post("/api/spell/add", (req, res) => {
     // Make string lowercase and remove special characters
     const editedSpellName = req.body.spellName.toLowerCase().replace(/[^\w\s]/gi, "");
-    db.Spells.findOne({ 
+    db.Spells.findOne({
       where: {
         editedName: editedSpellName
       }
     }).then(spellsResponse => {
-      console.log(spellsResponse);
       if (!spellsResponse) {
         scraper(editedSpellName, (spellObj) => {
           db.Spells.create(spellObj).then((newSpell) => {
@@ -153,18 +152,19 @@ module.exports = (app) => {
               characterId: req.body.characterId,
               spellId: newSpell.id
             }).then(() => {
-              db.CharacterSpells.findAll({ 
+              db.CharacterSpells.findAll({
                 where: {
-                  characterId: req.body.characterId 
-                }}).then(spellsArr => {
+                  characterId: req.body.characterId
+                }
+              }).then(spellsArr => {
                 const spellIdArr = spellsArr.map((element) => element.spellId);
-                db.Spells.findAll({ 
+                db.Spells.findAll({
                   where: {
                     id: { $in: spellIdArr }
                   }
                 }).then((spellData) => {
                   res.json(spellData);
-                });                       
+                });
               });
             });
           });
@@ -175,21 +175,22 @@ module.exports = (app) => {
           characterId: req.body.characterId,
           spellId: spellsResponse.id
         }).then(() => {
-          db.CharacterSpells.findAll({ 
+          db.CharacterSpells.findAll({
             where: {
-              characterId: req.body.characterId 
-            }}).then(spellsArr => {
+              characterId: req.body.characterId
+            }
+          }).then(spellsArr => {
             const spellIdArr = spellsArr.map((element) => element.spellId);
-            db.Spells.findAll({ 
+            db.Spells.findAll({
               where: {
                 id: { $in: spellIdArr }
               }
             }).then((spellData) => {
               res.json(spellData);
-            });                       
+            });
           });
         });
-      }      
+      }
     });
   });
 
@@ -198,18 +199,19 @@ module.exports = (app) => {
     db.CharacterSpells.destroy({
       where: req.body
     }).then(() => {
-      db.CharacterSpells.findAll({ 
+      db.CharacterSpells.findAll({
         where: {
-          characterId: req.body.characterId 
-        }}).then(spellsArr => {
+          characterId: req.body.characterId
+        }
+      }).then(spellsArr => {
         const spellIdArr = spellsArr.map((element) => element.spellId);
-        db.Spells.findAll({ 
+        db.Spells.findAll({
           where: {
             id: { $in: spellIdArr }
           }
         }).then((spellData) => {
           res.json(spellData);
-        });                       
+        });
       });
     });
   });
@@ -218,12 +220,11 @@ module.exports = (app) => {
   app.post("/api/spell/single", (req, res) => {
     // Make string lowercase and remove special characters
     const editedSpellName = req.body.spellName.toLowerCase().replace(/[^\w\s]/gi, "");
-    db.Spells.findOne({ 
+    db.Spells.findOne({
       where: {
         editedName: editedSpellName
       }
     }).then(spellsResponse => {
-      console.log(spellsResponse);
       if (!spellsResponse) {
         scraper(editedSpellName, (spellObj) => {
           db.Spells.create(spellObj).then((newSpell) => {
@@ -233,8 +234,8 @@ module.exports = (app) => {
       }
       else {
         res.json(spellsResponse);
-      }      
+      }
     });
   });
-  
+
 };

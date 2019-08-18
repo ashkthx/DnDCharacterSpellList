@@ -72,7 +72,7 @@ const scraper = (editedName, cb) => {
       higher_level
     };
 
-    console.log("spellObj:", spellObj);
+    // console.log("spellObj:", spellObj);
     return cb(spellObj);
 
   }).catch((err) => {

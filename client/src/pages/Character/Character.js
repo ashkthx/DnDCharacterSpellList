@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/FormControl";
-import Button from "react-bootstrap/Button";
+// import InputGroup from "react-bootstrap/InputGroup";
+// import FormControl from "react-bootstrap/FormControl";
+// import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import { Redirect } from "react-router-dom";
 import API from "../../utils/API";
@@ -80,9 +80,9 @@ class Character extends Component {
     orderArr.forEach((element, i) => {
       if (spellsObj[element]) {
         wrapperArr.push(
-        <LevelWrapper level={element} key={i}>
-          {spellsObj[element]}
-        </LevelWrapper>
+          <LevelWrapper level={element} key={i}>
+            {spellsObj[element]}
+          </LevelWrapper>
         )
       }
     });
@@ -98,11 +98,11 @@ class Character extends Component {
     return (
       <Row>
         <h1 className="characterh1">{this.state.characterName}</h1>
-          <FormComplete 
-            spellName={this.state.spellName}
-            handleInputChange={this.handleInputChange} 
-            handleSubmit={this.handleSubmit}
-          />
+        <FormComplete
+          spellName={this.state.spellName}
+          handleInputChange={this.handleInputChange}
+          handleSubmit={this.handleSubmit}
+        />
         {this.renderSpells()}
       </Row>
     );
