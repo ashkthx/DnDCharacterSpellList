@@ -61,6 +61,7 @@ const scraper = (editedName, cb) => {
     classes = classes.join(", ");
 
     const spellObj = {
+      editedName,
       spellTitle,
       classes,
       level,
