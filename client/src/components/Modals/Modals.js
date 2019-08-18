@@ -57,9 +57,16 @@ class Modals extends Component {
          const { name, email, password } = this.state;
          const userObj = { name, email, password };
          API.userSignup(userObj)
-            .then(() => {
-               this.props.updateAppState({ showAuth: false, isLoggedIn: true });
-               this.props.history.push("/members");
+            .then(({ data }) => {
+               const stateObj = { showAuth: false, isLoggedIn: true, name: data.name };
+               if (this.props.newCharConfirm) {
+                  stateObj.showChar = true;
+                  this.props.updateAppState(stateObj);
+               }
+               else {
+                  this.props.updateAppState(stateObj);
+                  this.props.history.push("/members");
+               }
             })
             .catch(err => {
                this.setState({
@@ -79,9 +86,16 @@ class Modals extends Component {
          const { email, password } = this.state;
          const userObj = { email, password };
          API.userLogin(userObj)
-            .then(() => {
-               this.props.updateAppState({ showAuth: false, isLoggedIn: true });
-               this.props.history.push("/members");
+            .then(({ data }) => {
+               const stateObj = { showAuth: false, isLoggedIn: true, name: data.name };
+               if (this.props.newCharConfirm) {
+                  stateObj.showChar = true;
+                  this.props.updateAppState(stateObj);
+               }
+               else {
+                  this.props.updateAppState(stateObj);
+                  this.props.history.push("/members");
+               }
             })
             .catch(err => {
                this.setState({
@@ -91,6 +105,39 @@ class Modals extends Component {
                console.log(err);
             });
       }
+   };
+
+   handleCharSubmit = () => {
+      const { characterName, characterClass, characterRace } = this.state;
+      const characterLevel = parseInt(this.state.characterLevel);
+      API.characterCreate({
+         characterName,
+         characterClass,
+         characterRace,
+         characterLevel
+      }).then(({ data }) => {
+         this.setState(
+            {
+               characterName: "",
+               characterRace: "",
+               characterClass: "",
+               characterLevel: ""
+            },
+            () => {
+               if (this.props.newCharConfirm) {
+                  const spellIdArr = this.props.spellsArr.map(spell => spell.id);
+                  const characterId = data.id;
+                  API.spellBulk({ spellIdArr, characterId }).then(() => {
+                     this.props.getUserData({ showChar: false, newCharConfirm: false });
+                     this.props.history.push("/character/" + data.id);
+                  });
+               }
+               else {
+                  this.props.getUserData({ showChar: false });
+               }
+            }
+         );
+      });
    };
 
    render() {
@@ -147,6 +194,16 @@ class Modals extends Component {
                            />
                         </Form.Group>
                      )}
+                     {this.props.spellsArr.length ? (
+                        <Form.Group controlId="formGroupCheck">
+                           <Form.Check
+                              type="checkbox"
+                              label="Create Character using Spells"
+                              value={this.props.newCharConfirm}
+                              onClick={() => this.props.updateAppState({ newCharConfirm: !this.props.newCharConfirm })}
+                           />
+                        </Form.Group>
+                     ) : ""}
                   </Form>
                </Modal.Body>
                <Modal.Footer>
@@ -155,7 +212,7 @@ class Modals extends Component {
                   )}
                   <Button variant="secondary" onClick={() => this.props.updateAppState({ showAuth: false })}>
                      Close
-               </Button>
+                  </Button>
                   <Button variant="dark" onClick={this.handleAuthSubmit}>
                      {this.props.type}
                   </Button>
@@ -168,7 +225,7 @@ class Modals extends Component {
                   <Modal.Title>New {this.props.type}</Modal.Title>
                </Modal.Header>
                <Modal.Body>
-                  <Form onSubmit={this.props.handleCharSubmit}>
+                  <Form onSubmit={this.handleCharSubmit}>
                      <Form.Group controlId="formCharacterName">
                         <Form.Label>Character Name</Form.Label>
                         <Form.Control
@@ -209,8 +266,8 @@ class Modals extends Component {
                   )}
                   <Button variant="secondary" onClick={() => this.props.updateAppState({ showChar: false })}>
                      Close
-               </Button>
-                  <Button variant="dark" onClick={this.props.handleCharSubmit}>
+                  </Button>
+                  <Button variant="dark" onClick={this.handleCharSubmit}>
                      Save
                </Button>
                </Modal.Footer>

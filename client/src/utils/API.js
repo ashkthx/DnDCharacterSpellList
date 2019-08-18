@@ -20,13 +20,9 @@ export default {
         console.log("API: userInfo");
         return axios.get("/api/user/user_data");
     },
-    userIsLoggedIn: () => {
-        console.log("API: userIsLoggedIn");
-        return axios.get("/api/user/is_logged_in");
-    },
 
     // Character methods
-    characterCreate: (characterData) => {        
+    characterCreate: (characterData) => {
         console.log("API: characterCreate");
         return axios.post("/api/character/create", characterData);
     },
@@ -36,7 +32,7 @@ export default {
     },
     characterDelete: (characterId) => {
         console.log("API: characterDelete");
-        return axios.post("/api/character/delete",  { characterId });
+        return axios.post("/api/character/delete", { characterId });
     },
 
     // Spell methods
@@ -51,5 +47,9 @@ export default {
     spellSingle: (spellName) => {
         console.log("API: spellSingle");
         return axios.post("/api/spell/single", { spellName });
+    },
+    spellBulk: (spellData) => {
+        console.log("API: spellBulk");
+        return axios.post("/api/spell/bulk", spellData);
     }
 };

@@ -6,7 +6,8 @@ const scraper = require("./scraper");
 module.exports = (app) => {
   // Login
   app.post("/api/user/login", passport.authenticate("local"), (req, res) => {
-    res.json("/members");
+    console.log(" -- LOGGED IN: ", req.user.id);
+    res.json({ name: req.user.name });
   });
 
   // Signup
@@ -37,7 +38,7 @@ module.exports = (app) => {
   app.get("/api/user/user_data", (req, res) => {
     if (!req.user) {
       // The user is not logged in, send back an empty object
-      res.json({});
+      res.json({ isLoggedIn: false });
     }
     else {
       // Otherwise send back the user's email and character info
@@ -47,21 +48,12 @@ module.exports = (app) => {
         }
       }).then(response => {
         res.json({
+          isLoggedIn: true,
           name: req.user.name,
           characterArr: response
         });
       });
     }
-  });
-
-  // Is user logged in
-  app.get("/api/user/is_logged_in", (req, res) => {
-    if (req.user) {
-      res.send(true);
-    }
-    else {
-      res.send(false);
-    };
   });
 
   // Create character
@@ -238,4 +230,22 @@ module.exports = (app) => {
     });
   });
 
+  app.post("/api/spell/bulk", (req, res) => {
+    saveSpell(0, req.body, () => {
+      res.json({});
+    })
+  });
 };
+
+saveSpell = (i, spellData, cb) => {
+  db.CharacterSpells.create({
+    characterId: spellData.characterId,
+    spellId: spellData.spellIdArr[i]
+  }).then(() => {
+    i++;
+    if (i < spellData.spellIdArr.length) {
+      return saveSpell(i, spellData, cb);
+    }
+    cb();
+  })
+}

@@ -11,7 +11,7 @@ class Header extends Component {
   handleLogout = () => {
     API.userLogout()
       .then(() => {
-        this.props.updateAppState({ isLoggedIn: false });
+        this.props.updateAppState({ isLoggedIn: false, spellsArr: [] });
         this.props.history.push("/");
       })
       .catch(err => {

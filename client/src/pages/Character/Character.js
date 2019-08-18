@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-// import InputGroup from "react-bootstrap/InputGroup";
-// import FormControl from "react-bootstrap/FormControl";
-// import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import { Redirect } from "react-router-dom";
 import API from "../../utils/API";
@@ -18,7 +15,7 @@ class Character extends Component {
     spellsArr: []
   };
 
-  componentWillMount() {
+  componentDidMount() {
     API.characterData(this.props.match.params.characterId).then(response => {
       if (!response.data.status) {
         this.setState({ isLoggedIn: false });

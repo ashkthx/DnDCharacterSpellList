@@ -1,0 +1,11 @@
+.home-wrapper {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.auth {
+   color: teal;
+   text-decoration: underline;
+   cursor: pointer;
+}

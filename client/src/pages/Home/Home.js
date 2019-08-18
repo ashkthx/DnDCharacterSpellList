@@ -8,8 +8,7 @@ import "./Home.css";
 
 class Home extends Component {
   state = {
-    spellName: "",
-    spellsArr: []
+    spellName: ""
   };
 
   handleInputChange = event => {
@@ -19,24 +18,28 @@ class Home extends Component {
 
   handleSubmit = event => {
     API.spellSingle(this.state.spellName).then(response => {
-      const newSpellsArr = this.state.spellsArr;
+      const newSpellsArr = this.props.spellsArr;
       newSpellsArr.push(response.data);
       this.setState({
-        spellsArr: newSpellsArr,
         spellName: ""
       });
+      this.props.updateAppState({ spellsArr: newSpellsArr, homeSearched: true });
     })
   };
 
   handleDelete = spellId => {
     const newSpellsArr = this.state.spellsArr.filter(element => element.id !== spellId);
-    this.setState({ spellsArr: newSpellsArr });
+    this.setState({ spellsArr: newSpellsArr }, () => {
+      if (!newSpellsArr.length) {
+        this.props.updateAppState({ homeSearched: false })
+      }
+    });
   };
 
   renderSpells = () => {
     const spellsObj = {};
 
-    this.state.spellsArr.forEach((element, i) => {
+    this.props.spellsArr.forEach((element, i) => {
       if (spellsObj[element.level]) {
         spellsObj[element.level].push(<SpellCard {...element} handleDelete={this.handleDelete} key={i} />);
       }
@@ -63,14 +66,16 @@ class Home extends Component {
 
   render() {
     return (
-      <div>
+      <div className="home-wrapper">
         <FormComplete
           spellName={this.state.spellName}
           handleInputChange={this.handleInputChange}
           handleSubmit={this.handleSubmit} />
-        {
-          // this.state.spellsArr.length && 
-        }
+        {this.props.spellsArr.length ? (
+          <h4>
+            <span className="auth" onClick={() => this.props.updateAppState({ showAuth: true, type: "Login" })}>Login</span> or <span className="auth" onClick={() => this.props.updateAppState({ showAuth: true, type: "Sign Up" })}>Sign Up</span> to save these spells for a new Character
+          </h4>
+        ) : ""}
         {this.renderSpells()}
       </div>
     );

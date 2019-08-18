@@ -5,88 +5,14 @@ import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
-import Modals from "../../components/Modals";
 import API from "../../utils/API";
 import "./Members.css";
 
 class Members extends Component {
-  state = {
-    name: "",
-    characterArr: [],
-    isLoggedIn: true,
 
-    // Modal
-    show: false,
-    type: "Character",
-    errorMessage: null,
-
-    // Form
-    characterName: "",
-    characterRace: "",
-    characterClass: "",
-    characterLevel: ""
-  };
-
-  componentWillMount() {
-    this.getUserData();
+  componentDidMount() {
+    this.props.getUserData();
   }
-
-  getUserData = () => {
-    API.userInfo().then(response => {
-      if (response.data.name) {
-        this.setState(response.data);
-      } else {
-        this.setState({ isLoggedIn: false });
-      }
-    });
-  };
-
-  handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-  };
-
-  handleOpen = () => {
-    this.setState({
-      show: true
-    });
-  };
-
-  handleClose = () => {
-    this.setState({
-      show: false
-    });
-  };
-
-  handleFormSubmit = event => {
-    event.preventDefault();
-    if (this.state.type === "Character") {
-      this.characterCreate();
-    }
-  };
-
-  characterCreate = () => {
-    const { characterName, characterClass, characterRace } = this.state;
-    const characterLevel = parseInt(this.state.characterLevel);
-    API.characterCreate({
-      characterName,
-      characterClass,
-      characterRace,
-      characterLevel
-    }).then(response => {
-      console.log("Created character");
-      this.setState(
-        {
-          show: false,
-          characterName: "",
-          characterRace: "",
-          characterClass: "",
-          characterLevel: ""
-        },
-        this.getUserData
-      );
-    });
-  };
 
   handleCardClick = characterId => {
     this.props.history.push("/character/" + characterId);
@@ -107,11 +33,11 @@ class Members extends Component {
     return (
       <Row>
         <div className="col-md-6 col-md-offset-3">
-          <h2>Welcome {this.state.name}!</h2>
-          <Button onClick={this.handleOpen} variant="dark">
+          <h2>Welcome {this.props.name}!</h2>
+          <Button onClick={() => this.props.updateAppState({ showChar: true })} variant="dark">
             Create a New Character
             </Button>
-          {this.state.characterArr.reverse().map((element, i) => {
+          {this.props.characterArr.reverse().map((element, i) => {
             return <Card key={i} border="dark" bsPrefix="card character-card" onClick={() => this.handleCardClick(element.id)}>
               <Card.Body>
                 <Card.Title>
@@ -125,7 +51,6 @@ class Members extends Component {
             </Card>
           })}
         </div>
-        <Modals />
       </Row>
     );
   }

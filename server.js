@@ -38,10 +38,10 @@ db.sequelize.sync({ force: false }).then(function() {
   //     characterLevel: 6,
   //     characterRace: "Half Elf",
   //     characterClass: "Warlock"
-    }).then(() => {
-      app.listen(PORT, function() {
-        console.log("==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.", PORT, PORT);
-      });
-    });
+  //  }).then(() => {
+  app.listen(PORT, function() {
+    console.log("==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.", PORT, PORT);
+  });
+});
 //   });
 // });
